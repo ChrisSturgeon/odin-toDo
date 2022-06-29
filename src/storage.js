@@ -12,7 +12,6 @@ const allTasks = [makeBed, postShorts, goWalk, fixToilet, shoutLoud];
 
 allTasks.forEach(saveTask);
 
-
 // Stores individual task in localStorage.
 function saveTask(task) {
   window.localStorage.setItem(`${task.title}`, JSON.stringify(task));
@@ -28,16 +27,20 @@ function fetchAll() {
   return fetchedTasks;
 }
 
-function filterTasks(projectName) {
+// Filters all stored tasks by provided project name passed by button value. 
+function filterTasks() {
   var allTasks = fetchAll();
+  var projectName = this.value;
   var relatedTasks = [];
   for (var task of allTasks) {
     if (task.project === projectName) {
       relatedTasks.push(task);
       }
     };
+  console.log(relatedTasks);
   return relatedTasks;
 };
 
-export { filterTasks };
+
+export { saveTask, filterTasks };
 
