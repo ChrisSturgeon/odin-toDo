@@ -3,15 +3,17 @@ import { format } from 'date-fns'
 import { task } from './task.js';
 // All functions relating to saving and fetching from localStorage
 
+
+
 var exampleDate = format(new Date(), 'EE. do MMM yy');
 // Sample Data 
 
-var makeBed = task('make bed', 'Make the bloody bed yeah!', 'default', exampleDate);
-var postShorts = task('post shorts', 'Return shorts to Surfdome', 'default', exampleDate);
-var goWalk = task('go walking', 'go for a bloody nice walk', 'cow', exampleDate);
-var fixToilet = task('fix toilet', 'fix the fucking toilet', 'default', exampleDate);
-var shoutLoud = task('shout loud', 'shout as loud as I can', 'cow', exampleDate);
-var stopTrain = task('stop train', 'engage beast mode and stop a bloody train', 'trains', exampleDate)
+var makeBed = task('make bed', 'Make the bloody bed yeah!', 'default', exampleDate, 'low');
+var postShorts = task('post shorts', 'Return shorts to Surfdome', 'default', exampleDate, 'medium');
+var goWalk = task('go walking', 'go for a bloody nice walk', 'cow', exampleDate, 'medium');
+var fixToilet = task('fix toilet', 'fix the fucking toilet', 'default', exampleDate, 'low');
+var shoutLoud = task('shout loud', 'shout as loud as I can', 'cow', exampleDate, 'high');
+var stopTrain = task('stop train', 'engage beast mode and stop a bloody train', 'trains', exampleDate, 'medium')
 
 const allTasks = [makeBed, postShorts, goWalk, fixToilet, shoutLoud, stopTrain];
 
