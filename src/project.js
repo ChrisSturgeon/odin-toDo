@@ -1,3 +1,4 @@
+import { fetchAll } from "./storage";
 
 const project = (name) => {
   const items = [];
@@ -6,7 +7,3 @@ const project = (name) => {
   }
   return { name, items, addTask };
 }
-
-var cleanSink = project('Clean Sink');
-
-export { project, cleanSink }

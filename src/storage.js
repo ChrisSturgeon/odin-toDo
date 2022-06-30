@@ -7,8 +7,9 @@ var postShorts = task('post shorts', 'Return shorts to Surfdome');
 var goWalk = task('go walking', 'go for a bloody nice walk', 'cow');
 var fixToilet = task('fix toilet', 'fix the fucking toilet');
 var shoutLoud = task('shout loud', 'shout as loud as I can', 'cow');
+var stopTrain = task('stop train', 'engage beast mode and stop a bloody train', 'trains')
 
-const allTasks = [makeBed, postShorts, goWalk, fixToilet, shoutLoud];
+const allTasks = [makeBed, postShorts, goWalk, fixToilet, shoutLoud, stopTrain];
 
 allTasks.forEach(saveTask);
 
@@ -41,6 +42,26 @@ function filterTasks() {
   return relatedTasks;
 };
 
+// Returns list of unique project names
+function getProjectNames() {
+  var projectNames = [];
+  var allTasks = fetchAll();
+  for (var task of allTasks) {
 
-export { saveTask, filterTasks };
+    if (!projectNames.includes(task.project)) {
+      projectNames.push(task.project)
+    }; 
+  };
+  return projectNames;
+}
+
+// Deletes item from local storage 
+function removeItem(title) {
+  localStorage.removeItem(title);
+}
+
+
+
+
+export { saveTask, fetchAll, filterTasks, getProjectNames };
 

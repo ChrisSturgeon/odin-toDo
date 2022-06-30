@@ -1,4 +1,4 @@
-
+import './style.css';
 import { filterTasks } from './storage.js';
 import { test } from './domEvents.js'
 
@@ -9,16 +9,9 @@ import { test } from './domEvents.js'
 
 
 
-var cowBtn = document.getElementById('cowBtn');
-
-var defaultBtn = document.getElementById('defaultBtn');
 
 
 
-cowBtn.addEventListener('click', filterTasks);
-defaultBtn.addEventListener('click', filterTasks);
-
-document.getElementById('testBtn').addEventListener('click', test)
 
 
 
