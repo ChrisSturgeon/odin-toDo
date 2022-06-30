@@ -1,5 +1,5 @@
  import { task } from './task.js';
-import { saveTask, fetchAll, filterTasks, getProjectNames } from './storage.js';
+import { saveTask, fetchAll, filterTasks, getProjectNames, complete } from './storage.js';
 
 const main = document.getElementById('main');
 
@@ -26,18 +26,72 @@ function projectBtns() {
     var btn = document.createElement('button');
     btn.innerText = name;
     btn.value = name;
-    btn.addEventListener('click', filterTasks);
+    btn.addEventListener('click', showTasks);
     projectBtns.appendChild(btn);
   };
   sideBar.appendChild(projectBtns);
 };
+
+// Generates all tasks for individual project
+
+function showTasks() {
+  main.innerHTML = '';
+  main.classList.add('tasksMain');
+  const frame = document.createElement('div');
+  frame.classList.add('taskFrame');
+  main.appendChild(frame);
+
+  const header = document.createElement('h1');
+  header.innerText = `${this.value} tasks`;
+  frame.appendChild(header);
+
+  var tasks = filterTasks(this.value);
+  console.log(tasks);
+
+  const table = document.createElement('table');
+  const headerRow = document.createElement('tr');
+  const headers = ['Title', 'Description', 'Complete'];
+
+  for (var dog of headers) {
+    var headerCell = document.createElement('th');
+    headerCell.innerText = dog;
+    headerRow.appendChild(headerCell);
+  }
+  table.appendChild(headerRow);
+
+  for (var task of tasks) {
+    var row = document.createElement('tr');
+    var title = document.createElement('td');
+    title.innerText = task.title;
+    row.appendChild(title);
+
+    var description = document.createElement('td');
+    description.innerText = task.description;
+    row.appendChild(description);
+   
+
+    var completeBtn = document.createElement('button');
+    completeBtn.innerText = 'Mark Done';
+    completeBtn.setAttribute('value', task.title);
+    completeBtn.addEventListener('click', complete);
+    row.appendChild(completeBtn);
+    table.appendChild(row);
+  }
+
+
+
+
+
+  frame.appendChild(table);
+
+}
+
 
 
 // New Task page
 
 function newTask() {
 
-  console.log('test');
   main.innerHTML = '';
   main.classList.add('newTaskMain');
 
@@ -69,8 +123,6 @@ function newTask() {
 
   formInputs.appendChild(projectLabel);
   formInputs.appendChild(projectSelect);
-
-
 
 
 
@@ -113,6 +165,8 @@ function newTask() {
 projectBtns();
 
 newTask();
+
+document.getElementById('newTask').addEventListener('click', newTask)
 
 
 

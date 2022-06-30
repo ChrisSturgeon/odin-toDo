@@ -29,16 +29,15 @@ function fetchAll() {
 }
 
 // Filters all stored tasks by provided project name passed by button value. 
-function filterTasks() {
+function filterTasks(inputName) {
   var allTasks = fetchAll();
-  var projectName = this.value;
+  var projectName = inputName;
   var relatedTasks = [];
   for (var task of allTasks) {
     if (task.project === projectName) {
       relatedTasks.push(task);
       }
     };
-  console.log(relatedTasks);
   return relatedTasks;
 };
 
@@ -55,6 +54,21 @@ function getProjectNames() {
   return projectNames;
 }
 
+// Mark done 
+
+function complete() {
+  var task = JSON.parse(localStorage.getItem(this.value));
+  if (task.completed) {
+    task.completed = false;
+  } else {
+    task.completed = true;
+  }
+  localStorage.setItem(this.value, JSON.stringify(task));
+  console.log(task);
+}
+
+  
+
 // Deletes item from local storage 
 function removeItem(title) {
   localStorage.removeItem(title);
@@ -63,5 +77,9 @@ function removeItem(title) {
 
 
 
-export { saveTask, fetchAll, filterTasks, getProjectNames };
+
+
+
+
+export { saveTask, fetchAll, filterTasks, getProjectNames, complete };
 
