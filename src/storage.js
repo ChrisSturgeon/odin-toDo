@@ -4,7 +4,6 @@ import { task } from './task.js';
 // All functions relating to saving and fetching from localStorage
 
 
-
 var exampleDate = new Date();
 // Sample Data 
 
@@ -39,11 +38,6 @@ function fetchAll() {
   };
   return fetchedTasks;
 }
-
-function deleteTask(taskName) {
-  localStorage.removeItem(taskName);
-}
-
 
 
 // Filters all stored tasks by provided project name passed by button value. 

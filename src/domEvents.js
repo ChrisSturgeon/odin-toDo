@@ -51,7 +51,7 @@ function showTasks() {
 
   const table = document.createElement('table');
   const headerRow = document.createElement('tr');
-  const headers = ['Title', 'Due Date', 'Priority', 'Complete', 'View All'];
+  const headers = ['Title', 'Due Date', 'Priority', 'Complete', 'View All', 'Delete'];
 
   for (var dog of headers) {
     var headerCell = document.createElement('th');
@@ -69,7 +69,6 @@ function showTasks() {
     var dueDate = document.createElement('td');
 
     dueDate.innerText = format((parseJSON(task.dueDate)), 'EE. do MMM yy');
-    console.log(typeof(task.dueDate));
     row.appendChild(dueDate);
 
     var priority = document.createElement('td');
@@ -83,14 +82,24 @@ function showTasks() {
     row.appendChild(completeBtn);
 
     var view = document.createElement('td');
-
     var viewBtn = document.createElement('button');
     viewBtn.innerText = 'View All';
     viewBtn.setAttribute('value', task.title);
     viewBtn.addEventListener('click', showTask);
     view.appendChild(viewBtn);
-
     row.appendChild(view);
+
+
+    var remove = document.createElement('td');
+    row.appendChild(remove);
+    var removeBtn = document.createElement('button');
+    removeBtn.innerText = "Remove";
+    removeBtn.setAttribute('value', task.title)
+    console.log(task.title);
+    removeBtn.addEventListener('click', () => {removeItem(removeBtn.value)});
+    remove.appendChild(removeBtn);
+    
+
     table.appendChild(row);
   
   }
@@ -163,6 +172,12 @@ function showTask() {
   editBtn.setAttribute('value', task.title);
   editBtn.addEventListener('click', editTask);
   taskBtns.appendChild(editBtn);
+
+  var deleteBtn = document.createElement('button');
+  deleteBtn.innerText = 'Remove';
+  deleteBtn.setAttribute('value', task.title);
+  deleteBtn.addEventListener('click', removeItem(this.value))
+  taskBtns.appendChild(deleteBtn);
 
 }
 
