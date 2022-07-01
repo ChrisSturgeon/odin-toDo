@@ -119,3 +119,8 @@ th, td {
   padding: 5px;
 }
 
+.taskBtns {
+  display: flex;
+  justify-content: space-around;
+}
+

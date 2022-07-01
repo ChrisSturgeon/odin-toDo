@@ -24,6 +24,12 @@ function saveTask(task) {
   window.localStorage.setItem(`${task.title}`, JSON.stringify(task));
 }
 
+function fetchTask(taskName) {
+  const task = JSON.parse(localStorage.getItem( taskName ));
+  console.log(task);
+  return task;
+}
+
 // Fetches and returns all tasks in array.
 function fetchAll() {
   const fetchedTasks = [];
@@ -73,8 +79,6 @@ function complete() {
   console.log(task);
 }
 
-  
-
 // Deletes item from local storage 
 function removeItem(title) {
   localStorage.removeItem(title);
@@ -87,5 +91,5 @@ function removeItem(title) {
 
 
 
-export { saveTask, fetchAll, filterTasks, getProjectNames, complete };
+export { saveTask, fetchTask, fetchAll, filterTasks, getProjectNames, complete };
 
