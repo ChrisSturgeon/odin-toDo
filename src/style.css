@@ -120,6 +120,7 @@ th, td {
 }
 
 .taskBtns {
+  width: 100%;
   display: flex;
   justify-content: space-around;
 }

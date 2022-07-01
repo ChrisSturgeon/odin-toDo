@@ -5,7 +5,7 @@ import { task } from './task.js';
 
 
 
-var exampleDate = format(new Date(), 'EE. do MMM yy');
+var exampleDate = new Date();
 // Sample Data 
 
 var makeBed = task('make bed', 'Make the bloody bed yeah!', 'default', exampleDate, 'low');
@@ -39,6 +39,12 @@ function fetchAll() {
   };
   return fetchedTasks;
 }
+
+function deleteTask(taskName) {
+  localStorage.removeItem(taskName);
+}
+
+
 
 // Filters all stored tasks by provided project name passed by button value. 
 function filterTasks(inputName) {
@@ -81,15 +87,11 @@ function complete() {
 
 // Deletes item from local storage 
 function removeItem(title) {
+  console.log(`${title} Removed`)
   localStorage.removeItem(title);
 }
 
 
 
-
-
-
-
-
-export { saveTask, fetchTask, fetchAll, filterTasks, getProjectNames, complete };
+export { saveTask, fetchTask, fetchAll, filterTasks, getProjectNames, complete, removeItem };
 

@@ -1,6 +1,6 @@
-import { format, parseISO } from 'date-fns'
+import { format, parseISO, parseJSON } from 'date-fns'
 import { task } from './task.js';
-import { saveTask, fetchTask, filterTasks, getProjectNames, complete } from './storage.js';
+import { saveTask, fetchTask, filterTasks, getProjectNames, complete, removeItem } from './storage.js';
 import { projects, projectObj, projectsList, newProject } from './project.js'
 
 const main = document.getElementById('main');
@@ -9,7 +9,7 @@ function addTask() {
   var title = document.getElementById('title').value;
   var description = document.getElementById('description').value;
   var project = document.getElementById('project').value;
-  var date = format(parseISO(document.getElementById('dueDate').value), 'EE. do MMM yy');
+  var date = new Date(document.getElementById('dueDate').value);
   var priority = document.getElementById('priority').value;
   var tempTask = task(title, description, project, date, priority);
 
@@ -67,7 +67,9 @@ function showTasks() {
     row.appendChild(title);
 
     var dueDate = document.createElement('td');
-    dueDate.innerText = task.dueDate;
+
+    dueDate.innerText = format((parseJSON(task.dueDate)), 'EE. do MMM yy');
+    console.log(typeof(task.dueDate));
     row.appendChild(dueDate);
 
     var priority = document.createElement('td');
@@ -133,7 +135,7 @@ function showTask() {
   var dueDateLabel = document.createElement('div');
   dueDateLabel.innerText = 'Due Date';
   var dueDate = document.createElement('div');
-  dueDate.innerText = task.dueDate;
+  dueDate.innerText = format((parseJSON(task.dueDate)), 'EE. do MMM yy');
   details.appendChild(dueDateLabel);
   details.appendChild(dueDate);
 
@@ -156,9 +158,111 @@ function showTask() {
   completeBtn.addEventListener('click', complete);
   taskBtns.appendChild(completeBtn);
 
+  var editBtn = document.createElement('button');
+  editBtn.innerText = 'Edit';
+  editBtn.setAttribute('value', task.title);
+  editBtn.addEventListener('click', editTask);
+  taskBtns.appendChild(editBtn);
+
+}
+
+function editTask() {
+  var task = fetchTask( this.value );
+
+  main.innerHTML = '';
+  main.classList.add('newTaskMain');
+
+  const form = document.createElement('div');
+  form.classList.add('newTaskForm');
+  
+  var header = document.createElement('h1');
+  header.innerText = "Edit Task";
+  form.appendChild(header);
+
+  main.appendChild(form);
+
+  var formInputs = document.createElement('div');
+  formInputs.classList.add('formInputs')
+  
+  var projectLabel = document.createElement('label');
+  projectLabel.innerText = 'Project'
+  projectLabel.setAttribute('for', 'project');
+
+  var projectSelect = document.createElement('select');
+  projectSelect.setAttribute('id', 'project');
+  projectSelect.setAttribute('name', 'project');
+
+  var names = projectsList();
+  for (var name of names) {
+    var option = document.createElement('option');
+    option.value = name;
+    option.innerText = name;
+    projectSelect.appendChild(option);
+  }
+
+  formInputs.appendChild(projectLabel);
+  formInputs.appendChild(projectSelect);
+  projectSelect.value = task.project;
+
+  var titleLabel = document.createElement('label');
+  titleLabel.innerText = 'Title'
+  var titleInput = document.createElement('input');
+  titleInput.setAttribute('id', 'title');
+  titleInput.value = task.title;
+  formInputs.appendChild(titleLabel);
+  formInputs.appendChild(titleInput);
+
+  var descriptionLabel = document.createElement('label');
+  descriptionLabel.innerText = 'Description'
+  var descriptionInput = document.createElement('input');
+  descriptionInput.value = task.description;
+  descriptionInput.setAttribute('id', 'description');
+  formInputs.appendChild(descriptionLabel);
+  formInputs.appendChild(descriptionInput);
+
+  var dateLabel = document.createElement('label');
+  dateLabel.innerText = 'Due Date';
+  dateLabel.setAttribute('for', 'dueDate');
+
+  var dueDate = document.createElement('input');
+  dueDate.setAttribute('type', 'date');
+  dueDate.setAttribute('name', 'dueDate');
+  dueDate.setAttribute('id', 'dueDate');
+  dueDate.value = parseJSON(task.dueDate).toISOString().split('T')[0].slice(0, 10);
+  
+  formInputs.appendChild(dateLabel);
+  formInputs.appendChild(dueDate);
+
+  var priorityLabel = document.createElement('label');
+  priorityLabel.innerText = 'Priority';
+  priorityLabel.setAttribute('for', 'priority');
+
+  var priority = document.createElement('select');
+  priority.setAttribute('id', 'priority');
+  priority.setAttribute('name', 'priority');
+  var levels = ['medium', 'high', 'low'];
+
+  for (var level of levels) {
+    option = document.createElement('option');
+    option.value = level;
+    option.innerText = level;
+    priority.appendChild(option);
+  }
+
+  priority.value = task.priority;
+  formInputs.appendChild(priorityLabel);
+  formInputs.appendChild(priority);
 
 
+  form.appendChild(formInputs);
 
+  var saveBtn = document.createElement('button');
+  saveBtn.innerText = "Add Task"
+  saveBtn.addEventListener('click', addTask);
+  saveBtn.addEventListener('click', removeItem(this.value));
+  
+
+  form.appendChild(saveBtn);
 }
 
 
