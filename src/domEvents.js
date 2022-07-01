@@ -13,8 +13,13 @@ function addTask() {
   var priority = document.getElementById('priority').value;
   var tempTask = task(title, description, project, date, priority);
 
+  var cow = document.getElementById('title').value;
+  console.log(cow);
+
   saveTask(tempTask);
   projectBtns();
+  
+  
 }
 
 // Generates sidebar project buttons, clearing existing buttons. 
@@ -47,11 +52,10 @@ function showTasks() {
   frame.appendChild(header);
 
   var tasks = filterTasks(this.value);
-  console.log(tasks);
 
   const table = document.createElement('table');
   const headerRow = document.createElement('tr');
-  const headers = ['Title', 'Due Date', 'Priority', 'Complete', 'View All', 'Delete'];
+  const headers = ['Title', 'Due Date', 'Priority', 'Complete', 'View/Edit', 'Delete'];
 
   for (var dog of headers) {
     var headerCell = document.createElement('th');
@@ -83,7 +87,7 @@ function showTasks() {
 
     var view = document.createElement('td');
     var viewBtn = document.createElement('button');
-    viewBtn.innerText = 'View All';
+    viewBtn.innerHTML = '&rarr;';
     viewBtn.setAttribute('value', task.title);
     viewBtn.addEventListener('click', showTask);
     view.appendChild(viewBtn);
@@ -95,11 +99,9 @@ function showTasks() {
     var removeBtn = document.createElement('button');
     removeBtn.innerText = "Remove";
     removeBtn.setAttribute('value', task.title)
-    console.log(task.title);
     removeBtn.addEventListener('click', () => {removeItem(removeBtn.value)});
     remove.appendChild(removeBtn);
     
-
     table.appendChild(row);
   
   }
@@ -176,7 +178,7 @@ function showTask() {
   var deleteBtn = document.createElement('button');
   deleteBtn.innerText = 'Remove';
   deleteBtn.setAttribute('value', task.title);
-  deleteBtn.addEventListener('click', removeItem(this.value))
+  deleteBtn.addEventListener('click', removeItem)
   taskBtns.appendChild(deleteBtn);
 
 }
@@ -268,15 +270,13 @@ function editTask() {
   formInputs.appendChild(priorityLabel);
   formInputs.appendChild(priority);
 
-
   form.appendChild(formInputs);
 
   var saveBtn = document.createElement('button');
   saveBtn.innerText = "Add Task"
   saveBtn.addEventListener('click', addTask);
-  saveBtn.addEventListener('click', removeItem(this.value));
+  saveBtn.addEventListener('click', () => {removeItem(this.value)});
   
-
   form.appendChild(saveBtn);
 }
 
@@ -372,11 +372,9 @@ function newTask() {
   // Submit button
 
   var addBtn = document.createElement('button');
-  addBtn.innerText = "Add Task"
+  addBtn.innerText = "Add Task";
   addBtn.addEventListener('click', addTask);
   form.appendChild(addBtn);
-
-
   main.appendChild(form);
 
 }

@@ -1,5 +1,6 @@
 import { format } from 'date-fns'
 
+
 import { task } from './task.js';
 // All functions relating to saving and fetching from localStorage
 
@@ -43,10 +44,9 @@ function fetchAll() {
 // Filters all stored tasks by provided project name passed by button value. 
 function filterTasks(inputName) {
   var allTasks = fetchAll();
-  var projectName = inputName;
   var relatedTasks = [];
   for (var task of allTasks) {
-    if (task.project === projectName) {
+    if (task.project === inputName) {
       relatedTasks.push(task);
       }
     };
@@ -66,8 +66,7 @@ function getProjectNames() {
   return projectNames;
 }
 
-// Mark done 
-
+// Toggles task complete/uncomplete
 function complete() {
   var task = JSON.parse(localStorage.getItem(this.value));
   if (task.completed) {
@@ -84,7 +83,6 @@ function removeItem(title) {
   console.log(`${title} Removed`)
   localStorage.removeItem(title);
 }
-
 
 
 export { saveTask, fetchTask, fetchAll, filterTasks, getProjectNames, complete, removeItem };
