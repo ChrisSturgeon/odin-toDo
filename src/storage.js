@@ -8,6 +8,7 @@ import { task } from './task.js';
 var exampleDate = new Date();
 // Sample Data 
 
+
 var makeBed = task('make bed', 'Make the bloody bed yeah!', 'default', exampleDate, 'low');
 var postShorts = task('post shorts', 'Return shorts to Surfdome', 'default', exampleDate, 'medium');
 var goWalk = task('go walking', 'go for a bloody nice walk', 'cow', exampleDate, 'medium');
@@ -37,7 +38,7 @@ function fetchAll() {
     var obj = JSON.parse(localStorage.getItem( localStorage.key( i )));
     fetchedTasks.push(obj);
   };
-  return fetchedTasks;
+  return allTasks;
 }
 
 
@@ -58,7 +59,6 @@ function getProjectNames() {
   var projectNames = [];
   var allTasks = fetchAll();
   for (var task of allTasks) {
-
     if (!projectNames.includes(task.project)) {
       projectNames.push(task.project)
     }; 
@@ -83,6 +83,15 @@ function removeItem(title) {
   console.log(`${title} Removed`)
   localStorage.removeItem(title);
 }
+
+
+
+
+
+
+
+
+
 
 
 export { saveTask, fetchTask, fetchAll, filterTasks, getProjectNames, complete, removeItem };

@@ -1,6 +1,6 @@
 import { format, parseISO, parseJSON } from 'date-fns'
 import { task } from './task.js';
-import { saveTask, fetchTask, filterTasks, getProjectNames, complete, removeItem } from './storage.js';
+import { saveTask, fetchTask, filterTasks, getProjectNames, complete, removeItem, fetchAll } from './storage.js';
 import { projects, projectObj, projectsList, newProject } from './project.js'
 
 const main = document.getElementById('main');
@@ -16,9 +16,11 @@ function addTask() {
   var cow = document.getElementById('title').value;
   console.log(cow);
 
+  console.log(filterTasks('cow'));
+
   saveTask(tempTask);
   projectBtns();
-  
+
   
 }
 
@@ -33,14 +35,14 @@ function projectBtns() {
     var btn = document.createElement('button');
     btn.innerText = name;
     btn.value = name;
-    btn.addEventListener('click', showTasks);
+    btn.addEventListener('click', showTasks(name));
     projectBtns.appendChild(btn);
   };
   sideBar.appendChild(projectBtns);
 };
 
 // Generates all tasks for individual project
-function showTasks() {
+function showTasks(name) {
   main.innerHTML = '';
   main.classList.add('tasksMain');
   const frame = document.createElement('div');
@@ -48,10 +50,10 @@ function showTasks() {
   main.appendChild(frame);
 
   const header = document.createElement('h1');
-  header.innerText = `${this.value} tasks`;
+  header.innerText = `${name} tasks`;
   frame.appendChild(header);
 
-  var tasks = filterTasks(this.value);
+  var tasks = filterTasks(name);
 
   const table = document.createElement('table');
   const headerRow = document.createElement('tr');
