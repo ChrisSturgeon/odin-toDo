@@ -8,8 +8,8 @@ export function sampleData() {
     console.log('Local storage empty, loading sample data...')
 
     // Create example projects
-    var cleaning = project(cleaning);
-    var coding = project(project);
+    var cleaning = project('cleaning');
+    var coding = project('project');
 
     var exampleDate = new Date();
 

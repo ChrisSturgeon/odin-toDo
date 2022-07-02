@@ -126,6 +126,10 @@ body {
   font-size: 2rem;
 }
 
+.taskFrame button {
+  min-width: 25px;
+}
+
 .header {
   display: flex;
   justify-content: center;

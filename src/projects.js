@@ -1,12 +1,21 @@
 
+import { displayTasks, projectBtns, refreshTasks } from "./domEvents";
+
 // Project obj factory function.
 export function project() {
-  var name = name;  var arr = [];
+  var arr = [];
   function addTask(task) {
     this.arr.push(task);
   }
   return { arr, addTask }
 };
+
+export function createProject() {
+  var name = document.getElementById('projectInput');
+  saveProject(name.value, project());
+  name.value = '';
+  projectBtns();
+}
 
 // Saves project in local storage.
 export function saveProject(key, value) {
@@ -22,6 +31,19 @@ export function fetchProject(name) {
   project.removeTask = function(name) {
     this.arr = this.arr.filter(task => task['title'] !== name); 
   }
+
+  project.toggleComplete = function(taskName) {
+    for (var task of this.arr) {
+      if (task['title'] == taskName) {
+        if (task['completed'] == false) {
+          task['completed'] = true;
+        } else {
+          task['completed'] = false;
+        };
+        console.log(task['completed']);  
+      };
+    };
+  };
     return project;
   };
 
@@ -34,26 +56,31 @@ export function projectNames() {
   return nameArr;
 }
 
+// Toggles task completion
 export function completeTask() {
   var arr = (this.value).split(' + ')
   var projectName = arr[0];
   var taskName = arr[1];
 
   var project = fetchProject(projectName);
-  for (var task of project.arr) {
-    if (task['title'] == taskName) {
-      console.log(task['completed']);
-      if (task['completed'] == false) {
-        task['completed'] = true;
-        console.log(task['completed']);
-        saveProject(projectName, project);
-      } else {
-        task['completed'] = false;
-        console.log(task['completed']);
-        saveProject(projectName, project);
-      }
-    };
-  };
+  project.toggleComplete(taskName);
+  saveProject(projectName, project);
+  refreshTasks();
+
 };
+
+// Removes task from project's task array
+export function removeTask() {
+  var arr = (this.value).split(' + ')
+  var projectName = arr[0];
+  var taskName = arr[1];
+  var project = fetchProject(projectName);
+  project.removeTask(taskName);
+  saveProject(projectName, project);
+  refreshTasks();
+};
+
+
+
 
 
