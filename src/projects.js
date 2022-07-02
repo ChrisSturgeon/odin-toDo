@@ -1,7 +1,7 @@
 
 // Project obj factory function.
 export function project() {
-  var arr = [];
+  var name = name;  var arr = [];
   function addTask(task) {
     this.arr.push(task);
   }
@@ -19,11 +19,9 @@ export function fetchProject(name) {
   project.addTask = function(name) {
     this.arr.push(name)
   };
-
   project.removeTask = function(name) {
     this.arr = this.arr.filter(task => task['title'] !== name); 
   }
-    console.log(project);
     return project;
   };
 
@@ -36,6 +34,26 @@ export function projectNames() {
   return nameArr;
 }
 
+export function completeTask() {
+  var arr = (this.value).split(' + ')
+  var projectName = arr[0];
+  var taskName = arr[1];
 
+  var project = fetchProject(projectName);
+  for (var task of project.arr) {
+    if (task['title'] == taskName) {
+      console.log(task['completed']);
+      if (task['completed'] == false) {
+        task['completed'] = true;
+        console.log(task['completed']);
+        saveProject(projectName, project);
+      } else {
+        task['completed'] = false;
+        console.log(task['completed']);
+        saveProject(projectName, project);
+      }
+    };
+  };
+};
 
 
