@@ -30,7 +30,11 @@ export function fetchProject(name) {
   };
   project.removeTask = function(name) {
     this.arr = this.arr.filter(task => task['title'] !== name); 
-  }
+  };
+
+  project.addTask = function(taskName) {
+    this.arr.push(taskName);
+  };
 
   project.toggleComplete = function(taskName) {
     for (var task of this.arr) {
@@ -44,8 +48,24 @@ export function fetchProject(name) {
       };
     };
   };
+
+  project.fetchTask = function(taskName) {
+    for (var task of this.arr) {
+      if (task['title'] == taskName) {
+        return task;
+      }
+    };
+  };
+
+  project.findIndex = function(taskName) {
+     return (this.arr.findIndex(task => task['title'] == taskName));
+  };
     return project;
   };
+
+  
+
+
 
 // Returns array of project names in local storage.
 export function projectNames() {

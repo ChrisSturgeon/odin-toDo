@@ -7,7 +7,6 @@ const main = document.getElementById('main');
 var activeProject = '';
 
 // New project inputs
-
 export function newProjectInput() {
   var area = document.getElementById('newProject');
   var newProject = document.createElement('input');
@@ -56,7 +55,6 @@ export function refreshTasks() {
   createHeader(`${activeProject} Tasks`);
   createTaskTable(project);
 };
-
 
 // Creates Task Frame
 function createFrame() {
@@ -135,7 +133,7 @@ function createTaskTable(project) {
     var viewBtn = document.createElement('button');
     viewBtn.innerHTML = '&rarr;';
     viewBtn.setAttribute('value', task.title);
-    // viewBtn.addEventListener('click', showTask);
+    viewBtn.addEventListener('click', viewTask);
     view.appendChild(viewBtn);
     row.appendChild(view);
 
@@ -156,6 +154,7 @@ function newTaskForm() {
 
   var header = document.createElement('h1');
   header.innerText = `New task in ${activeProject}`;
+  header.setAttribute('id', 'header');
   form.appendChild(header);
 
   var formInputs = document.createElement('div');
@@ -208,16 +207,16 @@ function newTaskForm() {
   formInputs.appendChild(priority);
 
   form.appendChild(formInputs);
-  
-  // Submit button
 
   var addBtn = document.createElement('button');
   addBtn.innerText = "Add Task";
+  addBtn.setAttribute('id', 'addBtn');
   addBtn.addEventListener('click', saveTask);
   form.appendChild(addBtn);
   main.appendChild(form);
 };
 
+// Saves new task into active project
 function saveTask() {
   var title = document.getElementById('title').value;
   var description = document.getElementById('description').value;
@@ -225,11 +224,122 @@ function saveTask() {
   var priority = document.getElementById('priority').value;
   var newTask = task(title, description, priority, dueDate);
   var project = fetchProject(activeProject);
-  project.arr.push(newTask);
+  project.addTask(newTask);
+  saveProject(activeProject, project);
+  refreshTasks();
+};
+
+// Shows full details for given task
+function viewTask() {
+  var project = fetchProject(activeProject);
+  var task = project.fetchTask(this.value);
+
+
+
+  main.innerHTML = '';
+  main.classList.add('tasksMain');
+  const frame = document.createElement('div');
+  frame.classList.add('taskFrame');
+  main.appendChild(frame);
+
+  var header = document.createElement('h1');
+  header.innerText = task.title;
+  frame.appendChild(header);
+
+  var details = document.createElement('div');
+  details.classList.add('formInputs');
+
+  var descriptionLabel = document.createElement('div');
+  descriptionLabel.innerText = 'Description';
+  var description = document.createElement('div');
+  description.innerText = task.description;
+  details.appendChild(descriptionLabel);
+  details.appendChild(description);
+
+  var projectLabel = document.createElement('div');
+  projectLabel.innerText = 'Project';
+  var project = document.createElement('div');
+  project.innerText = task.project;
+  details.appendChild(projectLabel);
+  details.appendChild(project);
+
+  var dueDateLabel = document.createElement('div');
+  dueDateLabel.innerText = 'Due Date';
+  var dueDate = document.createElement('div');
+  dueDate.innerText = format((parseJSON(task.dueDate)), 'EE. do MMM yy');
+  details.appendChild(dueDateLabel);
+  details.appendChild(dueDate);
+
+  var priorityLabel = document.createElement('div');
+  priorityLabel.innerText = 'Priority'
+  var priority = document.createElement('div');
+  priority.innerText = task.priority;
+  details.appendChild(priorityLabel);
+  details.appendChild(priority);
+  frame.appendChild(details);
+
+  var taskBtns = document.createElement('div');
+  taskBtns.classList.add('taskBtns');
+  frame.appendChild(taskBtns);
+
+  var completeBtn = document.createElement('button');
+  completeBtn.innerText = "Complete";
+  completeBtn.setAttribute('value', task.title);
+  completeBtn.setAttribute('value', `${activeProject} + ${task.title}`);
+  completeBtn.addEventListener('click', completeTask);
+  taskBtns.appendChild(completeBtn);
+
+  var editBtn = document.createElement('button');
+  editBtn.innerText = 'Edit';
+  editBtn.setAttribute('value', task.title);
+  editBtn.addEventListener('click', editTask);
+  taskBtns.appendChild(editBtn);
+
+  var deleteBtn = document.createElement('button');
+  deleteBtn.innerText = 'Remove';
+  deleteBtn.setAttribute('value', task.title);
+  deleteBtn.setAttribute('value', `${activeProject} + ${task.title}`);
+  deleteBtn.addEventListener('click', removeTask);
+  taskBtns.appendChild(deleteBtn);
+};
+
+function editTask() {
+  newTaskForm();
+  var project = fetchProject(activeProject);
+  var task = project.fetchTask(this.value);
+
+  document.getElementById('header').innerText = `Editing ${task.title}`;
+  document.getElementById('title').value = task.title;
+  document.getElementById('description').value = task.description;
+  document.getElementById('dueDate').value = parseJSON(task.dueDate).toISOString().split('T')[0].slice(0, 10);
+  document.getElementById('priority').value = task.priority;
+
+  var addBtn = document.getElementById('addBtn');
+  addBtn.innerText = "Save edit";
+  addBtn.removeEventListener('click', saveTask);
+  addBtn.setAttribute('value', task.title);
+  addBtn.addEventListener('click', saveEdit);
+}
+
+function saveEdit() {
+  var project = fetchProject(activeProject);
+  var index = project.findIndex(this.value);
+  console.log(index);
+
+  var title = document.getElementById('title').value;
+  var description = document.getElementById('description').value;
+  var dueDate = new Date(document.getElementById('dueDate').value);
+  var priority = document.getElementById('priority').value;
+
+  var newTask = task(title, description, priority, dueDate);
+
+  var project = fetchProject(activeProject);
+  var index = project.findIndex(this.value);
+
+  project.arr.splice(index, 1, newTask);
+
+  // project.addTask(newTask);
   saveProject(activeProject, project);
   refreshTasks();
 
 }
-
-
-
