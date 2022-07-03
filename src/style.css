@@ -59,6 +59,10 @@ body {
   grid-template-rows: 1fr;
 }
 
+button:hover {
+  cursor: pointer;
+}
+
 #sideBar {
   background-color: rgb(143, 177, 185);
   grid-row: 1 / 4;

@@ -1,42 +1,58 @@
 
-import { format, parseISO, parseJSON } from 'date-fns'
-import { projectNames, fetchTask, fetchProject, fetchTasks, completeTask, removeTask, saveProject, project } from './projects.js'
+import { format, parseJSON } from 'date-fns'
+import { project, projectNames, fetchProject, completeTask, removeTask, saveProject } from './projects.js'
 import { task } from './tasks.js';
-const main = document.getElementById('main');
 
+
+const main = document.getElementById('main');
 var activeProject = '';
 
-// New project inputs
-export function newProjectInput() {
-  var area = document.getElementById('newProject');
-  var newProject = document.createElement('input');
-  newProject.setAttribute('id', 'projectInput');
+function createProject() {
+  var newProjectName = document.getElementById('projectInput');
+  saveProject(newProjectName.value, project());
+  newProjectName.value = '';
+  makeSideBar();
+  console.log('test')
+};
+
+function removeProject() {
+  localStorage.removeItem(this.value);
+  makeSideBar();
+  activeProject = Object.keys(localStorage)[0];
+  refreshTasks();
+};
+
+export function makeSideBar() {
+
+  const sideBar = document.getElementById('sideBar');
+  sideBar.innerHTML = '';
+
+  const title = document.createElement('h1');
+  title.innerText = "To Do"
+  sideBar.appendChild(title);
+
+  const newArea = document.createElement('div');
+  sideBar.appendChild(newArea);
+  const btnArea = document.createElement('div');
+  sideBar.appendChild(btnArea);
+ 
+  var newProjectInput = document.createElement('input');
+  newProjectInput.setAttribute('id', 'projectInput');
+  newArea.appendChild(newProjectInput);
+
   var submitBtn = document.createElement('button');
   submitBtn.innerText = "Add";
   submitBtn.addEventListener('click', (createProject));
-  area.appendChild(newProject);
-  area.appendChild(submitBtn);
-}
+  newArea.appendChild(submitBtn);
 
-function createProject() {
-  var name = document.getElementById('projectInput');
-  saveProject(name.value, project());
-  name.value = '';
-  projectBtns();
-}
-
-// Creates sidebar project buttons
-export function projectBtns() {
-  var content = document.getElementById('projectBtns');
-  content.innerHTML = '';
   for (var project of projectNames()) {
     var btn = document.createElement('button');
     btn.innerText = project.slice(0, 1).toUpperCase() + project.slice(1);
     btn.setAttribute('value', project);
     btn.addEventListener('click', showTasks);
-    content.appendChild(btn);
+    btnArea.appendChild(btn);
   };
-};
+}
 
 // Shows overview of all tasks for a project. 
 function showTasks() {
@@ -86,6 +102,11 @@ function createTaskTable(project) {
   newBtn.innerText = "New Task";
   newBtn.addEventListener('click', newTaskForm);
   header.appendChild(newBtn);
+  var delProject = document.createElement('button');
+  delProject.innerText = "Delete project";
+  delProject.setAttribute('value', activeProject);
+  delProject.addEventListener('click', removeProject);
+  header.appendChild(delProject);
 
   const table = document.createElement('table');
   table.setAttribute('id', 'taskTable');
@@ -234,8 +255,6 @@ function viewTask() {
   var project = fetchProject(activeProject);
   var task = project.fetchTask(this.value);
 
-
-
   main.innerHTML = '';
   main.classList.add('tasksMain');
   const frame = document.createElement('div');
@@ -259,7 +278,7 @@ function viewTask() {
   var projectLabel = document.createElement('div');
   projectLabel.innerText = 'Project';
   var project = document.createElement('div');
-  project.innerText = task.project;
+  project.innerText = activeProject;
   details.appendChild(projectLabel);
   details.appendChild(project);
 
@@ -341,4 +360,4 @@ function saveEdit() {
   // project.addTask(newTask);
   saveProject(activeProject, project);
   refreshTasks();
-}
+};

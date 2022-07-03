@@ -1,5 +1,5 @@
 
-import { displayTasks, projectBtns, refreshTasks } from "./domEvents";
+import {  refreshTasks } from "./domEvents";
 
 // Project obj factory function.
 export function project() {
@@ -9,13 +9,6 @@ export function project() {
   }
   return { arr, addTask }
 };
-
-// export function createProject() {
-//   var name = document.getElementById('projectInput');
-//   saveProject(name.value, project());
-//   name.value = '';
-//   projectBtns();
-// }
 
 // Saves project in local storage.
 export function saveProject(key, value) {
@@ -62,9 +55,6 @@ export function fetchProject(name) {
   };
     return project;
   };
-
-  
-
 
 
 // Returns array of project names in local storage.
