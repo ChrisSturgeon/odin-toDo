@@ -9,10 +9,14 @@ var activeProject = '';
 
 function createProject() {
   var newProjectName = document.getElementById('projectInput');
-  saveProject(newProjectName.value, project());
-  newProjectName.value = '';
-  makeSideBar();
-  console.log('test')
+
+  if (newProjectName.value.length < 1) {
+    alert('Please enter a project name');
+  } else {
+    saveProject(newProjectName.value, project());
+    newProjectName.value = '';
+    makeSideBar();
+  };
 };
 
 function removeProject() {
@@ -24,17 +28,25 @@ function removeProject() {
 
 export function makeSideBar() {
 
-  const sideBar = document.getElementById('sideBar');
+  var sideBar = document.getElementById('sideBar');
   sideBar.innerHTML = '';
 
-  const title = document.createElement('h1');
-  title.innerText = "To Do"
+  var title = document.createElement('h1');
+  title.innerText = "Do It!"
   sideBar.appendChild(title);
+  var collapseBtn = document.createElement('button');
+  collapseBtn.innerText = "Create New Project";
+  collapseBtn.addEventListener('click', () => {
+    document.getElementById('newArea').style.display = "block";
+  });
+  sideBar.appendChild(collapseBtn);
 
-  const newArea = document.createElement('div');
+  var newArea = document.createElement('div');
   sideBar.appendChild(newArea);
-  const btnArea = document.createElement('div');
-  sideBar.appendChild(btnArea);
+  newArea.classList.add('newArea');
+  newArea.setAttribute('id', 'newArea');
+
+
  
   var newProjectInput = document.createElement('input');
   newProjectInput.setAttribute('id', 'projectInput');
@@ -44,6 +56,11 @@ export function makeSideBar() {
   submitBtn.innerText = "Add";
   submitBtn.addEventListener('click', (createProject));
   newArea.appendChild(submitBtn);
+
+
+  const btnArea = document.createElement('div');
+  btnArea.classList.add('projectBtns');
+  sideBar.appendChild(btnArea);
 
   for (var project of projectNames()) {
     var btn = document.createElement('button');
@@ -343,7 +360,6 @@ function editTask() {
 function saveEdit() {
   var project = fetchProject(activeProject);
   var index = project.findIndex(this.value);
-  console.log(index);
 
   var title = document.getElementById('title').value;
   var description = document.getElementById('description').value;
@@ -357,7 +373,9 @@ function saveEdit() {
 
   project.arr.splice(index, 1, newTask);
 
-  // project.addTask(newTask);
   saveProject(activeProject, project);
   refreshTasks();
 };
+
+
+

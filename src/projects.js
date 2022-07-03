@@ -37,7 +37,6 @@ export function fetchProject(name) {
         } else {
           task['completed'] = false;
         };
-        console.log(task['completed']);  
       };
     };
   };
