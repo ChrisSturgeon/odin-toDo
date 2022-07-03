@@ -1,14 +1,14 @@
 
 import { format, parseISO, parseJSON } from 'date-fns'
-import { projectNames, fetchTask, fetchProject, fetchTasks, completeTask, removeTask, createProject } from './projects.js'
-
+import { projectNames, fetchTask, fetchProject, fetchTasks, completeTask, removeTask, saveProject, project } from './projects.js'
+import { task } from './tasks.js';
 const main = document.getElementById('main');
 
 var activeProject = '';
 
 // New project inputs
 
-export function newProject() {
+export function newProjectInput() {
   var area = document.getElementById('newProject');
   var newProject = document.createElement('input');
   newProject.setAttribute('id', 'projectInput');
@@ -17,6 +17,13 @@ export function newProject() {
   submitBtn.addEventListener('click', (createProject));
   area.appendChild(newProject);
   area.appendChild(submitBtn);
+}
+
+function createProject() {
+  var name = document.getElementById('projectInput');
+  saveProject(name.value, project());
+  name.value = '';
+  projectBtns();
 }
 
 // Creates sidebar project buttons
@@ -62,6 +69,7 @@ function createFrame() {
 // Creates header for Task Frame
 function createHeader(name) {
   var header = document.createElement('div');
+  header.setAttribute('id', 'header');
   header.classList.add('header');
 
   var title = document.createElement('h1');
@@ -74,6 +82,12 @@ function createHeader(name) {
 
 // Creates task overview table
 function createTaskTable(project) {
+
+  var header = document.getElementById('header');
+  var newBtn = document.createElement('button');
+  newBtn.innerText = "New Task";
+  newBtn.addEventListener('click', newTaskForm);
+  header.appendChild(newBtn);
 
   const table = document.createElement('table');
   table.setAttribute('id', 'taskTable');
@@ -134,4 +148,88 @@ function createTaskTable(project) {
     remove.appendChild(removeBtn);
   };
 };
+
+function newTaskForm() {
+  main.innerHTML = '';
+  const form = document.createElement('div');
+  form.classList.add('newTaskForm');
+
+  var header = document.createElement('h1');
+  header.innerText = `New task in ${activeProject}`;
+  form.appendChild(header);
+
+  var formInputs = document.createElement('div');
+  formInputs.classList.add('formInputs');
+
+  var titleLabel = document.createElement('label');
+  titleLabel.innerText = 'Title'
+  var titleInput = document.createElement('input');
+  titleInput.setAttribute('id', 'title');
+  formInputs.appendChild(titleLabel);
+  formInputs.appendChild(titleInput);
+
+  var descriptionLabel = document.createElement('label');
+  descriptionLabel.innerText = 'Description'
+  var descriptionInput = document.createElement('input');
+  descriptionInput.setAttribute('id', 'description');
+  formInputs.appendChild(descriptionLabel);
+  formInputs.appendChild(descriptionInput);
+
+  var dateLabel = document.createElement('label');
+  dateLabel.innerText = 'Due Date';
+  dateLabel.setAttribute('for', 'dueDate');
+
+  var dueDate = document.createElement('input');
+  dueDate.setAttribute('type', 'date');
+  dueDate.setAttribute('name', 'dueDate');
+  dueDate.setAttribute('id', 'dueDate');
+  dueDate.setAttribute('value', '2022-06-30');
+
+  formInputs.appendChild(dateLabel);
+  formInputs.appendChild(dueDate);
+
+  var priorityLabel = document.createElement('label');
+  priorityLabel.innerText = 'Priority';
+  priorityLabel.setAttribute('for', 'priority');
+
+  var priority = document.createElement('select');
+  priority.setAttribute('id', 'priority');
+  priority.setAttribute('name', 'priority');
+  var levels = ['medium', 'high', 'low'];
+
+  for (var level of levels) {
+    var option = document.createElement('option');
+    option.value = level;
+    option.innerText = level;
+    priority.appendChild(option);
+  }
+
+  formInputs.appendChild(priorityLabel);
+  formInputs.appendChild(priority);
+
+  form.appendChild(formInputs);
+  
+  // Submit button
+
+  var addBtn = document.createElement('button');
+  addBtn.innerText = "Add Task";
+  addBtn.addEventListener('click', saveTask);
+  form.appendChild(addBtn);
+  main.appendChild(form);
+};
+
+function saveTask() {
+  var title = document.getElementById('title').value;
+  var description = document.getElementById('description').value;
+  var dueDate = new Date(document.getElementById('dueDate').value);
+  var priority = document.getElementById('priority').value;
+  var newTask = task(title, description, priority, dueDate);
+  var project = fetchProject(activeProject);
+  project.arr.push(newTask);
+  saveProject(activeProject, project);
+  refreshTasks();
+
+}
+
+
 

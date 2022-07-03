@@ -100,7 +100,7 @@ body {
 
 .newTaskForm h1 {
   font-size: 2rem;
-  color: blue;
+  color: rgb(0, 0, 0);
   text-align: center;
 }
 
@@ -131,9 +131,12 @@ body {
 }
 
 .header {
+  width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
+  align-items: center;
 }
+
 
 table {
   font-size: 1rem;

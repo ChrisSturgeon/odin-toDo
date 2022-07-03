@@ -10,12 +10,12 @@ export function project() {
   return { arr, addTask }
 };
 
-export function createProject() {
-  var name = document.getElementById('projectInput');
-  saveProject(name.value, project());
-  name.value = '';
-  projectBtns();
-}
+// export function createProject() {
+//   var name = document.getElementById('projectInput');
+//   saveProject(name.value, project());
+//   name.value = '';
+//   projectBtns();
+// }
 
 // Saves project in local storage.
 export function saveProject(key, value) {
