@@ -341,5 +341,4 @@ function saveEdit() {
   // project.addTask(newTask);
   saveProject(activeProject, project);
   refreshTasks();
-
 }
