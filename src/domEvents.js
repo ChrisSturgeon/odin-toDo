@@ -118,20 +118,13 @@ function createHeader(name) {
   delProject.addEventListener('click', removeProject);
   btns.appendChild(delProject);
 
-
-
-
-
   var frame = document.getElementById('taskFrame');
   frame.appendChild(header);
 };
 
 // Creates task overview table
 function createTaskTable(project) {
-
   var header = document.getElementById('header');
-
-
   const table = document.createElement('table');
   table.setAttribute('id', 'taskTable');
   const headerRow = document.createElement('tr');
@@ -277,51 +270,70 @@ function saveTask() {
   refreshTasks();
 };
 
+// Creates header for Task Frame
+function createTaskHeader(name) {
+  const frame = document.getElementById('taskFrame');
+  var header = document.createElement('div');
+  frame.appendChild(header);
+  header.setAttribute('id', 'header');
+  header.classList.add('header');
+  header.classList.add('taskHeader');
+
+  var title = document.createElement('h1');
+  title.innerText = `Details for ${name}`;
+  header.appendChild(title);
+
+};
+
 // Shows full details for given task
 function viewTask() {
   var project = fetchProject(activeProject);
   var task = project.fetchTask(this.value);
-
   main.innerHTML = '';
-  main.classList.add('tasksMain');
-  const frame = document.createElement('div');
-  frame.classList.add('taskFrame');
-  main.appendChild(frame);
+  createFrame();
+  createTaskHeader(task.title);
 
-  var header = document.createElement('h1');
-  header.innerText = task.title;
-  frame.appendChild(header);
+  const frame = document.getElementById('taskFrame');
 
   var details = document.createElement('div');
-  details.classList.add('formInputs');
+  details.classList.add('taskDetails');
 
   var descriptionLabel = document.createElement('div');
-  descriptionLabel.innerText = 'Description';
+  descriptionLabel.innerText = 'Description:';
   var description = document.createElement('div');
   description.innerText = task.description;
   details.appendChild(descriptionLabel);
   details.appendChild(description);
 
   var projectLabel = document.createElement('div');
-  projectLabel.innerText = 'Project';
+  projectLabel.innerText = 'Project:';
   var project = document.createElement('div');
-  project.innerText = activeProject;
+  project.innerText = activeProject.slice(0, 1).toUpperCase() + activeProject.slice(1);
   details.appendChild(projectLabel);
   details.appendChild(project);
 
   var dueDateLabel = document.createElement('div');
-  dueDateLabel.innerText = 'Due Date';
+  dueDateLabel.innerText = 'Due Date:';
   var dueDate = document.createElement('div');
   dueDate.innerText = format((parseJSON(task.dueDate)), 'EE. do MMM yy');
   details.appendChild(dueDateLabel);
   details.appendChild(dueDate);
 
   var priorityLabel = document.createElement('div');
-  priorityLabel.innerText = 'Priority'
+  priorityLabel.innerText = 'Priority:'
   var priority = document.createElement('div');
   priority.innerText = task.priority;
   details.appendChild(priorityLabel);
   details.appendChild(priority);
+  frame.appendChild(details);
+
+  var completeLabel = document.createElement('div');
+  completeLabel.innerText = 'Complete:'
+  
+  var complete = document.createElement('div');
+
+  details.appendChild(completeLabel);
+  details.appendChild(complete);
   frame.appendChild(details);
 
   var taskBtns = document.createElement('div');
@@ -329,11 +341,31 @@ function viewTask() {
   frame.appendChild(taskBtns);
 
   var completeBtn = document.createElement('button');
-  completeBtn.innerText = "Complete";
+
+  if (task.completed) {
+    completeBtn.innerHTML = "&#10003;"
+    completeBtn.addEventListener('mouseover', () => {
+      completeBtn.innerHTML = "&#x2717;";  
+    });
+    completeBtn.addEventListener('mouseout', () => {
+      completeBtn.innerHTML = "&#10003;";  
+    });
+
+  } else {
+    completeBtn.innerHTML = "&#x2717;"
+    completeBtn.addEventListener('mouseover', () => {
+      completeBtn.innerHTML = "&#10003;";  
+    });
+    completeBtn.addEventListener('mouseout', () => {
+      completeBtn.innerHTML = "&#x2717;";  
+    });
+  };
+  
   completeBtn.setAttribute('value', task.title);
   completeBtn.setAttribute('value', `${activeProject} + ${task.title}`);
+  completeBtn.classList.add('innerCompleteBtn')
   completeBtn.addEventListener('click', completeTask);
-  taskBtns.appendChild(completeBtn);
+  complete.appendChild(completeBtn);
 
   var editBtn = document.createElement('button');
   editBtn.innerText = 'Edit';
