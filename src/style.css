@@ -101,6 +101,9 @@ button:hover {
 #sideBar h1 {
   font-family: InterExtraBold;
   font-size: 4rem;
+  color: white;
+  text-shadow: 0px 3px 3px rgba(0,0,0,0.2);;
+
 }
 
 .newArea {
@@ -108,7 +111,6 @@ button:hover {
   flex-direction: column;
   align-items: center;
   max-height: 100px;
-  transition: max-height 0.2s ease-out;
 }
 
 #sideBar button, .btnArea button {
@@ -116,9 +118,13 @@ button:hover {
   padding: 10px 5px;
   border-radius: 10px;
   outline: none;
-  border: 1px solid var(--base-blue);;
+  border: none;
   font-size: 1rem;
   color: var(--base-blue);
+  font-family: InterBold;
+  color: white;
+  background-image: linear-gradient(135deg, #abd699, #75c9b7);
+  box-shadow: 0px 3px 3px rgba(0,0,0,0.2);
 }
 
 .projectBtns {
@@ -171,7 +177,7 @@ button:hover {
   flex-direction: column;
   align-items: center;
   border-radius: 10px;
-  padding: 20px;
+  padding: 30px;
   box-shadow: 0px 3px 3px rgba(0,0,0,0.2);
 
 }
@@ -181,30 +187,88 @@ button:hover {
 }
 
 .taskFrame button {
-  min-width: 25px;
+  min-width: 50px;
 }
 
 .header {
   width: 100%;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   color: white;
   font-family: 'InterBold';
+  margin-bottom: 30px;
+}
+
+.btns {
+  display: flex;
+  gap: 30px;
+  height: 100%;
+}
+
+.btns button {
+  color: white;
+  background-color: rgba(255, 255, 255, 0);
+  border: 3px solid white;
+  font-family: 'InterBold';
+  border-radius: 5px;
+  font-size: 1.1rem;
+}
+
+.btns button:hover {
+  border: 3px solid #ffe26a; 
+  transform: scale(1.15);
 }
 
 
 table {
   font-size: 1rem;
   text-align: center;
+  font-family: InterBold;
+  color: white;
 }
 
 th {
   font-weight: bold;
+  border-bottom: 3px solid #ffe26a;
+  font-size: 1.2rem;
 }
 
 th, td {
-  padding: 5px;
+  padding: 10px 20px;
+}
+
+
+tr:hover{
+  background-color: #ffe16a44;
+}
+
+.completeBtn {
+  background-color: rgba(255, 255, 255, 0);
+  border: 2px solid #ffe26a;
+  color: #ffe16a00;
+  font-size: 1.1rem;
+  font-family: 'InterExtraBold';
+  border-radius: 5px;
+}
+
+.completeBtn:hover  {
+  color: #ffe26a;
+}
+
+.viewBtn {
+  background-color: rgba(255, 255, 255, 0);
+  border: 2px solid #ffe26a;
+  color: #ffe16a;
+  font-size: 1.1rem;
+  font-family: 'InterExtraBold';
+  border-radius: 5px;
+}
+
+
+
+.viewBtn:hover, .completeBtn:hover{
+  transform: scale(1.15);
 }
 
 .taskBtns {

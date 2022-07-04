@@ -46,8 +46,6 @@ export function makeSideBar() {
   newArea.classList.add('newArea');
   newArea.setAttribute('id', 'newArea');
 
-
- 
   var newProjectInput = document.createElement('input');
   newProjectInput.setAttribute('id', 'projectInput');
   newArea.appendChild(newProjectInput);
@@ -56,7 +54,6 @@ export function makeSideBar() {
   submitBtn.innerText = "Add";
   submitBtn.addEventListener('click', (createProject));
   newArea.appendChild(submitBtn);
-
 
   const btnArea = document.createElement('div');
   btnArea.classList.add('projectBtns');
@@ -107,6 +104,24 @@ function createHeader(name) {
   title.innerText = name.slice(0, 1).toUpperCase() + name.slice(1);
   header.appendChild(title);
 
+  var btns = document.createElement('div');
+  btns.classList.add('btns');
+  header.appendChild(btns);
+
+  var newBtn = document.createElement('button');
+  newBtn.innerText = "New Task";
+  newBtn.addEventListener('click', newTaskForm);
+  btns.appendChild(newBtn);
+  var delProject = document.createElement('button');
+  delProject.innerText = "Delete project";
+  delProject.setAttribute('value', activeProject);
+  delProject.addEventListener('click', removeProject);
+  btns.appendChild(delProject);
+
+
+
+
+
   var frame = document.getElementById('taskFrame');
   frame.appendChild(header);
 };
@@ -115,15 +130,7 @@ function createHeader(name) {
 function createTaskTable(project) {
 
   var header = document.getElementById('header');
-  var newBtn = document.createElement('button');
-  newBtn.innerText = "New Task";
-  newBtn.addEventListener('click', newTaskForm);
-  header.appendChild(newBtn);
-  var delProject = document.createElement('button');
-  delProject.innerText = "Delete project";
-  delProject.setAttribute('value', activeProject);
-  delProject.addEventListener('click', removeProject);
-  header.appendChild(delProject);
+
 
   const table = document.createElement('table');
   table.setAttribute('id', 'taskTable');
@@ -147,7 +154,7 @@ function createTaskTable(project) {
     row.appendChild(title);
 
     var dueDate = document.createElement('td');
-    dueDate.innerText = format((parseJSON(task.dueDate)), 'EE. do MMM yy');
+    dueDate.innerText = format((parseJSON(task.dueDate)), 'EE. do MMM');
     row.appendChild(dueDate);
 
     var priority = document.createElement('td');
@@ -155,9 +162,10 @@ function createTaskTable(project) {
     row.appendChild(priority);
 
     var completeBtn = document.createElement('button');
+    completeBtn.classList.add('completeBtn');
 
     if (task['completed'] == false) {
-      completeBtn.innerHTML = '	&nbsp;';
+      completeBtn.innerHTML = '&#10003';
       
     } else {
       completeBtn.innerHTML = '&#10003;';
@@ -169,6 +177,7 @@ function createTaskTable(project) {
 
     var view = document.createElement('td');
     var viewBtn = document.createElement('button');
+    viewBtn.classList.add('viewBtn');
     viewBtn.innerHTML = '&rarr;';
     viewBtn.setAttribute('value', task.title);
     viewBtn.addEventListener('click', viewTask);
@@ -178,7 +187,8 @@ function createTaskTable(project) {
     var remove = document.createElement('td');
     row.appendChild(remove);
     var removeBtn = document.createElement('button');
-    removeBtn.innerHTML = 'Remove';
+    removeBtn.innerText = 'Del';
+    removeBtn.classList.add('completeBtn');
     removeBtn.setAttribute('value', `${activeProject} + ${task.title}`);
     removeBtn.addEventListener('click', removeTask);
     remove.appendChild(removeBtn);
