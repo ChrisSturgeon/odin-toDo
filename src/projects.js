@@ -1,5 +1,4 @@
-
-// Project obj factory function.
+// Project object factory function.
 export function makeProject() {
   var arr = [];
   function addTask(task) {
@@ -77,19 +76,13 @@ export function completeTask() {
 
 // Removes task from project's task array
 export function removeTask() {
-  console.log('Hello!')
   var arr = (this.value).split(' + ')
   var projectName = arr[0];
   var taskName = arr[1];
   var project = fetchProject(projectName);
   project.removeTask(taskName);
   saveProject(projectName, project);
-  console.log('WOrking?')
 };
-
-export function test() {
-  console.log('Hello!')
-}
 
 
 

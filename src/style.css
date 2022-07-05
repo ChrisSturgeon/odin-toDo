@@ -47,8 +47,6 @@ table {
 	border-spacing: 0;
 }
 
-
-
 /* MY CSS */
 
 @font-face {
@@ -71,7 +69,9 @@ body {
 }
 
 :root {
-  --base-blue: #16123f;
+  --base-yellow: #ffe26a;
+  --base-olive: #abd699;
+  --base-teal: #75c9b7;
 }
 
 body, button {
@@ -92,7 +92,7 @@ button:hover {
 }
 
 #sideBar {
-  background-color: #ffe26a;
+  background-color: var(--base-yellow);
   grid-row: 1 / 4;
   display: grid;
   grid-template-rows: auto 1fr 50px;;
@@ -116,7 +116,7 @@ button:hover {
   font-size: 1rem;
   font-family: InterBold;
   color: white;
-  background-image: linear-gradient(135deg, #abd699, #75c9b7);
+  background-image: linear-gradient(135deg, var(--base-olive), var(--base-teal));
   box-shadow: 0px 3px 3px rgba(0,0,0,0.2);
 }
 
@@ -178,7 +178,7 @@ p {
 .taskFrame {
   height: 85%;
   width: 85%;
-  background-image: linear-gradient(135deg, #abd699, #75c9b7);
+  background-image: linear-gradient(135deg, var(--base-olive), var(--base-teal));
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -189,7 +189,7 @@ p {
 
 .taskFrame h1 {
   font-size: 2rem;
-  text-decoration: underline 3px solid #ffe26a;
+  text-decoration: underline 3px solid var(--base-yellow);
   text-underline-offset: 2px;
 }
 
@@ -208,7 +208,7 @@ p {
 }
 
 .taskHeader {
-  text-decoration: underline 3px solid #ffe26a;
+  text-decoration: underline 3px solid var(--base-yellow);
   text-underline-offset: 5px;
 }
 
@@ -219,8 +219,8 @@ p {
 }
 
 .btns button, .taskBtns button, .homeBtn button, .addBtn {
-  color: #75c9b7;
-  background-color: #ffe26a; 
+  color: var(--base-teal);
+  background-color: var(--base-yellow); 
   border: 3px solid rgba(255, 255, 255, 0);
   font-family: 'InterBold';
   border-radius: 5px;
@@ -230,7 +230,7 @@ p {
 }
 
 .btns button:hover, .taskBtns button:hover,.homeBtn button:hover, .addBtn:hover {
-  border: 3px solid #ffe26a; 
+  border: 3px solid var(--base-yellow); 
   color: rgb(255, 255, 255);
 }
 
@@ -240,12 +240,12 @@ p {
 
 .taskFrame input, .taskFrame select {
   color: white;
-  border: 3px solid #ffe26a;
+  border: 3px solid var(--base-yellow);
   padding: 3px;
   border-radius: 5px;
   font-family: InterBold;
   font-size: 1.3rem;
-  background-color: #75c9b7;
+  background-color: var(--base-teal);
 }
 
 .taskFrame input:focus, .taskFrame select:focus {
@@ -262,7 +262,7 @@ table {
 
 th {
   font-weight: bold;
-  border-bottom: 3px solid #ffe26a;
+  border-bottom: 3px solid var(--base-yellow);
   font-size: 1.2rem;
 }
 
@@ -280,7 +280,7 @@ tr:nth-of-type(1):hover {
 
 .completeBtn {
   background-color: rgba(255, 255, 255, 0);
-  border: 2px solid #ffe26a;
+  border: 2px solid var(--base-yellow);
   color: #ffe16a00;
   font-size: 1.1rem;
   font-family: 'InterExtraBold';
@@ -293,7 +293,7 @@ tr:nth-of-type(1):hover {
 
 .innerCompleteBtn {
   background-color: rgba(255, 255, 255, 0);
-  border: 2px solid #ffe26a;
+  border: 2px solid var(--base-yellow);
   color: #ffe16a;
   font-size: 1.2rem;
   font-family: 'InterExtraBold';
@@ -302,7 +302,7 @@ tr:nth-of-type(1):hover {
 
 .viewBtn {
   background-color: rgba(255, 255, 255, 0);
-  border: 2px solid #ffe26a;
+  border: 2px solid var(--base-yellow);
   color: #ffe16a;
   font-size: 1.1rem;
   font-family: 'InterExtraBold';

@@ -104,7 +104,6 @@ function addProject() {
   } else {
     var newProject = makeProject();
     saveProject(newProjectName.value, newProject);
-    test();
     newProjectName.value = '';
     makeSideBar();
   };
@@ -487,7 +486,6 @@ export function homePage() {
 
   } else {
     activeProject = Object.keys(localStorage)[0];
-    console.log('Test');
     refreshTasks();
     makeSideBar();
   };
