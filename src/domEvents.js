@@ -1,4 +1,3 @@
-
 import { format, parseJSON } from 'date-fns'
 import { project, projectNames, fetchProject, completeTask, removeTask, saveProject } from './projects.js'
 import { loadSampleData, loadBlankProject } from './sampleData.js';
@@ -15,26 +14,7 @@ export function makeSideBar() {
   var title = document.createElement('h1');
   title.innerText = "Do It!"
   sideBar.appendChild(title);
-  var collapseBtn = document.createElement('button');
-  collapseBtn.innerText = "Create New Project";
-  collapseBtn.addEventListener('click', () => {
-    document.getElementById('newArea').style.display = "block";
-  });
-  sideBar.appendChild(collapseBtn);
 
-  var newArea = document.createElement('div');
-  sideBar.appendChild(newArea);
-  newArea.classList.add('newArea');
-  newArea.setAttribute('id', 'newArea');
-
-  var newProjectInput = document.createElement('input');
-  newProjectInput.setAttribute('id', 'projectInput');
-  newArea.appendChild(newProjectInput);
-
-  var submitBtn = document.createElement('button');
-  submitBtn.innerText = "Add";
-  submitBtn.addEventListener('click', (createProject));
-  newArea.appendChild(submitBtn);
 
   const btnArea = document.createElement('div');
   btnArea.classList.add('projectBtns');
@@ -48,16 +28,15 @@ export function makeSideBar() {
     btnArea.appendChild(btn);
   };
 
-  var demoBtn = document.createElement('button');
-  demoBtn.innerText = 'Load Demo Data';
-  demoBtn.setAttribute('id', 'demoBtn');
-  demoBtn.addEventListener('click', () => {
-    loadSampleData();
-    activeProject = 'cleaning';
-    makeSideBar();
-    refreshTasks();
+  var resetBtn = document.createElement('button');
+  resetBtn.innerText = "Reset All";
+  resetBtn.addEventListener('click', () => {
+    localStorage.clear();
+    window.location.reload();
   })
-  sideBar.appendChild(demoBtn);
+  sideBar.appendChild(resetBtn);
+
+
 
 };
 
@@ -440,59 +419,53 @@ function saveEdit() {
 export function homePage() {
 
   if (localStorage.length == 0) {
-    loadBlankProject();
     activeProject = 'default';
-    makeSideBar();
+    createFrame('Welcome!');
+
+    var frame = document.getElementById('taskFrame');
+    frame.classList.add('taskFrame')
+
+    var intro = document.createElement('p');
+  
+    intro.innerText = "It looks like it's your first time here. Would you like to load demo data or continue with a blank project?";
+    frame.appendChild(intro);
+
+    var btns = document.createElement('div');
+    btns.classList.add('taskBtns');
+    frame.appendChild(btns);
+
+    var demoBtn = document.createElement('button');
+    demoBtn.innerText = 'Load Demo Data';
+    demoBtn.setAttribute('id', 'demoBtn');
+    demoBtn.addEventListener('click', () => {
+      loadSampleData();
+      activeProject = 'cleaning';
+      makeSideBar();
+      refreshTasks();
+    })
+    btns.appendChild(demoBtn);
+
+    var blankProjectBtn = document.createElement('button');
+    blankProjectBtn.innerText = 'Blank Project';
+    blankProjectBtn.addEventListener('click', () => {
+      loadBlankProject();
+      activeProject = 'default';
+      makeSideBar();
+      refreshTasks();
+    })
+    btns.appendChild(blankProjectBtn);
+
   } else {
     activeProject = Object.keys(localStorage)[0];
-
+    console.log('Test');
+    refreshTasks();
     makeSideBar();
-  }
-
-  
-  // createFrame('Welcome!');
-  // var frame = document.getElementById('taskFrame');
-  // var intro = document.createElement('p');
-  // var btns = document.createElement('div');
-  // btns.classList.add('homeBtn')
-  // frame.appendChild(btns);
-
-  // if (localStorage.length == 0 ) {
-  //   loadSampleData();
-  // }
-  // makeSideBar();
-
-
-
-  // var blankProjectBtn = document.createElement('button');
-  // blankProjectBtn.innerText = 'Blank project';
-  // blankProjectBtn.addEventListener('click', () => {
-  //   loadBlankProject();
-  //   activeProject = 'cleaning';
-  //   makeSideBar();
-  //   refreshTasks();
-  // })
-
-
-
-  // btns.appendChild(blankProjectBtn);
-
-  // var demoProjectBtn = document.createElement('button');
-  // demoProjectBtn.innerText = "Demo project";
-  // demoProjectBtn.addEventListener('click', () => {
-  //   loadSampleData();
-  //   activeProject = 'default';
-  //   makeSideBar();
-  //   refreshTasks();
-  // })
-  
-
-  // btns.appendChild(demoProjectBtn);
-
-}
+  };
+};
 
 // Capitalises given word
 function capitalise(word) {
   return word.slice(0, 1).toUpperCase() + word.slice(1);
 }
+
 

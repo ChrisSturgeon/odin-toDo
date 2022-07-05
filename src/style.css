@@ -91,10 +91,8 @@ button:hover {
 #sideBar {
   background-color: #ffe26a;
   grid-row: 1 / 4;
-  display: flex;
-  flex-direction: column;;
-  align-items: center;
-  gap: 15px;
+  display: grid;
+  grid-template-rows: auto 1fr 50px;;
   padding: 10px 40px;
 }
 
@@ -129,6 +127,10 @@ button:hover {
   transform: scale(1.1);
 }
 
+#demoBtn {
+  justify-self: flex-end;
+}
+
 
 .projectBtns {
   display: flex;
@@ -145,6 +147,12 @@ button:hover {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+p {
+  padding-bottom: 50px;
+  font-family: InterBold;
+  font-size: 1.5rem;
 }
 
 .newTaskForm {

@@ -7,27 +7,3 @@ import './style.css'
 
 homePage();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
