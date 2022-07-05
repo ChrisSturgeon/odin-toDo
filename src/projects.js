@@ -1,6 +1,4 @@
 
-import {  refreshTasks } from "./domEvents";
-
 // Project obj factory function.
 export function project() {
   var arr = [];
@@ -74,7 +72,6 @@ export function completeTask() {
   var project = fetchProject(projectName);
   project.toggleComplete(taskName);
   saveProject(projectName, project);
-  refreshTasks();
 
 };
 
@@ -86,7 +83,6 @@ export function removeTask() {
   var project = fetchProject(projectName);
   project.removeTask(taskName);
   saveProject(projectName, project);
-  refreshTasks();
 };
 
 

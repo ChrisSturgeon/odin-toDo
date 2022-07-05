@@ -1,33 +1,14 @@
 
 import { format, parseJSON } from 'date-fns'
 import { project, projectNames, fetchProject, completeTask, removeTask, saveProject } from './projects.js'
+import { loadSampleData, loadBlankProject } from './sampleData.js';
 import { task } from './tasks.js';
-
 
 const main = document.getElementById('main');
 var activeProject = '';
 
-function createProject() {
-  var newProjectName = document.getElementById('projectInput');
-
-  if (newProjectName.value.length < 1) {
-    alert('Please enter a project name');
-  } else {
-    saveProject(newProjectName.value, project());
-    newProjectName.value = '';
-    makeSideBar();
-  };
-};
-
-function removeProject() {
-  localStorage.removeItem(this.value);
-  makeSideBar();
-  activeProject = Object.keys(localStorage)[0];
-  refreshTasks();
-};
-
+// Creates SideBar 
 export function makeSideBar() {
-
   var sideBar = document.getElementById('sideBar');
   sideBar.innerHTML = '';
 
@@ -61,49 +42,89 @@ export function makeSideBar() {
 
   for (var project of projectNames()) {
     var btn = document.createElement('button');
-    btn.innerText = project.slice(0, 1).toUpperCase() + project.slice(1);
+    btn.innerText = capitalise(project);
     btn.setAttribute('value', project);
     btn.addEventListener('click', showTasks);
     btnArea.appendChild(btn);
   };
-}
+
+  var demoBtn = document.createElement('button');
+  demoBtn.innerText = 'Load Demo Data';
+  demoBtn.setAttribute('id', 'demoBtn');
+  demoBtn.addEventListener('click', () => {
+    loadSampleData();
+    activeProject = 'cleaning';
+    makeSideBar();
+    refreshTasks();
+  })
+  sideBar.appendChild(demoBtn);
+
+};
+
+// Creates Task Frame and Frame Title
+function createFrame(titleText) {
+  const frame = document.createElement('div');
+  frame.setAttribute('id', 'taskFrame');
+  frame.classList.add('taskFrame');
+  main.appendChild(frame);
+
+  var header = document.createElement('div');
+  header.setAttribute('id', 'header');
+  header.classList.add('header');
+
+  var title = document.createElement('h1');
+  title.setAttribute('id', 'pageTitle');
+  title.innerText = titleText;
+  header.appendChild(title);
+  frame.appendChild(header);
+};
+
+// Refreshes page with tasks from active project.
+export function refreshTasks() {
+  var project = fetchProject (activeProject);
+  main.innerHTML = '';
+  var titleText = `${capitalise(activeProject)} Tasks`;
+  createFrame(titleText);
+  createProjectBtns();
+  createTaskTable(project);
+};
+
+// Creates new project from sidebar input.
+function createProject() {
+  var newProjectName = document.getElementById('projectInput');
+  if (newProjectName.value.length < 1) {
+    alert('Please enter a project name');
+  } else {
+    saveProject(newProjectName.value, project());
+    newProjectName.value = '';
+    makeSideBar();
+  };
+};
+
+// Removes project
+function removeProject() {
+  localStorage.removeItem(this.value);
+  makeSideBar();
+  activeProject = Object.keys(localStorage)[0];
+  refreshTasks();
+};
+
 
 // Shows overview of all tasks for a project. 
 function showTasks() {
   activeProject = this.value;
   var project = fetchProject ( this.value );
   main.innerHTML = '';
-  createFrame();
-  createHeader(`${this.value} Tasks`);
-  createTaskTable(project);
-};
 
-export function refreshTasks() {
-  var project = fetchProject (activeProject);
-  main.innerHTML = '';
-  createFrame();
-  createHeader(`${activeProject} Tasks`);
+  var titleText = `${capitalise(activeProject)} Tasks`
+  createFrame(titleText);
+  createProjectBtns();
   createTaskTable(project);
-};
-
-// Creates Task Frame
-function createFrame() {
-  const frame = document.createElement('div');
-  frame.setAttribute('id', 'taskFrame');
-  frame.classList.add('taskFrame');
-  main.appendChild(frame);
 };
 
 // Creates header for Task Frame
-function createHeader(name) {
-  var header = document.createElement('div');
-  header.setAttribute('id', 'header');
-  header.classList.add('header');
-
-  var title = document.createElement('h1');
-  title.innerText = name.slice(0, 1).toUpperCase() + name.slice(1);
-  header.appendChild(title);
-
+function createProjectBtns() {
+  const header = document.getElementById('header');
   var btns = document.createElement('div');
   btns.classList.add('btns');
   header.appendChild(btns);
@@ -117,9 +138,6 @@ function createHeader(name) {
   delProject.setAttribute('value', activeProject);
   delProject.addEventListener('click', removeProject);
   btns.appendChild(delProject);
-
-  var frame = document.getElementById('taskFrame');
-  frame.appendChild(header);
 };
 
 // Creates task overview table
@@ -143,7 +161,7 @@ function createTaskTable(project) {
     table.appendChild(row);
 
     var title = document.createElement('td');
-    title.innerText = task.title.slice(0, 1).toUpperCase() + task.title.slice(1);
+    title.innerText = capitalise(task.title);
     row.appendChild(title);
 
     var dueDate = document.createElement('td');
@@ -151,7 +169,7 @@ function createTaskTable(project) {
     row.appendChild(dueDate);
 
     var priority = document.createElement('td');
-    priority.innerText = task.priority;
+    priority.innerText = capitalise(task.priority);
     row.appendChild(priority);
 
     var completeBtn = document.createElement('button');
@@ -166,6 +184,7 @@ function createTaskTable(project) {
     }
     completeBtn.setAttribute('value', `${activeProject} + ${task.title}`);
     completeBtn.addEventListener('click', completeTask);
+    completeBtn.addEventListener('click', refreshTasks);
     row.appendChild(completeBtn);
 
     var view = document.createElement('td');
@@ -184,52 +203,51 @@ function createTaskTable(project) {
     removeBtn.classList.add('completeBtn');
     removeBtn.setAttribute('value', `${activeProject} + ${task.title}`);
     removeBtn.addEventListener('click', removeTask);
+    removeBtn.addEventListener('click', refreshTasks);
     remove.appendChild(removeBtn);
   };
 };
 
+// Creates page for inputting new task.
 function newTaskForm() {
   main.innerHTML = '';
-  const form = document.createElement('div');
-  form.classList.add('newTaskForm');
+  var headerText = `New Task in ${capitalise(activeProject)}`;
+  createFrame(headerText);
 
-  var header = document.createElement('h1');
-  header.innerText = `New task in ${activeProject}`;
-  header.setAttribute('id', 'header');
-  form.appendChild(header);
-
+  var frame = document.getElementById('taskFrame');
   var formInputs = document.createElement('div');
-  formInputs.classList.add('formInputs');
-
+  formInputs.classList.add('taskDetails');
+  frame.appendChild(formInputs)
+  
   var titleLabel = document.createElement('label');
-  titleLabel.innerText = 'Title'
+  titleLabel.innerText = 'Title:'
   var titleInput = document.createElement('input');
   titleInput.setAttribute('id', 'title');
   formInputs.appendChild(titleLabel);
   formInputs.appendChild(titleInput);
 
   var descriptionLabel = document.createElement('label');
-  descriptionLabel.innerText = 'Description'
+  descriptionLabel.innerText = 'Description:'
   var descriptionInput = document.createElement('input');
   descriptionInput.setAttribute('id', 'description');
   formInputs.appendChild(descriptionLabel);
   formInputs.appendChild(descriptionInput);
 
   var dateLabel = document.createElement('label');
-  dateLabel.innerText = 'Due Date';
+  dateLabel.innerText = 'Due Date:';
   dateLabel.setAttribute('for', 'dueDate');
 
   var dueDate = document.createElement('input');
   dueDate.setAttribute('type', 'date');
   dueDate.setAttribute('name', 'dueDate');
   dueDate.setAttribute('id', 'dueDate');
-  dueDate.setAttribute('value', '2022-06-30');
+  dueDate.setAttribute('value', (format((new Date()), 'yyyy-MM-dd')));
 
   formInputs.appendChild(dateLabel);
   formInputs.appendChild(dueDate);
 
   var priorityLabel = document.createElement('label');
-  priorityLabel.innerText = 'Priority';
+  priorityLabel.innerText = 'Priority:';
   priorityLabel.setAttribute('for', 'priority');
 
   var priority = document.createElement('select');
@@ -240,21 +258,27 @@ function newTaskForm() {
   for (var level of levels) {
     var option = document.createElement('option');
     option.value = level;
-    option.innerText = level;
+    option.innerText = capitalise(level);
     priority.appendChild(option);
   }
-
   formInputs.appendChild(priorityLabel);
   formInputs.appendChild(priority);
 
-  form.appendChild(formInputs);
-
+  // Buttons
+  var btns = document.createElement('div');
+  btns.classList.add('taskBtns');
   var addBtn = document.createElement('button');
   addBtn.innerText = "Add Task";
   addBtn.setAttribute('id', 'addBtn');
   addBtn.addEventListener('click', saveTask);
-  form.appendChild(addBtn);
-  main.appendChild(form);
+  btns.appendChild(addBtn);
+
+  var goBackBtn = document.createElement('button');
+  goBackBtn.innerText = "Go Back";
+  goBackBtn.addEventListener('click', refreshTasks);
+  btns.appendChild(goBackBtn);
+  frame.appendChild(btns);
+
 };
 
 // Saves new task into active project
@@ -270,45 +294,31 @@ function saveTask() {
   refreshTasks();
 };
 
-// Creates header for Task Frame
-function createTaskHeader(name) {
-  const frame = document.getElementById('taskFrame');
-  var header = document.createElement('div');
-  frame.appendChild(header);
-  header.setAttribute('id', 'header');
-  header.classList.add('header');
-  header.classList.add('taskHeader');
-
-  var title = document.createElement('h1');
-  title.innerText = `Details for ${name}`;
-  header.appendChild(title);
-
-};
 
 // Shows full details for given task
 function viewTask() {
   var project = fetchProject(activeProject);
   var task = project.fetchTask(this.value);
   main.innerHTML = '';
-  createFrame();
-  createTaskHeader(task.title);
+
+  var titleText = `Details for ${task.title}`
+  createFrame(titleText);
 
   const frame = document.getElementById('taskFrame');
-
   var details = document.createElement('div');
   details.classList.add('taskDetails');
 
   var descriptionLabel = document.createElement('div');
   descriptionLabel.innerText = 'Description:';
   var description = document.createElement('div');
-  description.innerText = task.description;
+  description.innerText = capitalise(task.description);
   details.appendChild(descriptionLabel);
   details.appendChild(description);
 
   var projectLabel = document.createElement('div');
   projectLabel.innerText = 'Project:';
   var project = document.createElement('div');
-  project.innerText = activeProject.slice(0, 1).toUpperCase() + activeProject.slice(1);
+  project.innerText = capitalise(activeProject);
   details.appendChild(projectLabel);
   details.appendChild(project);
 
@@ -322,7 +332,7 @@ function viewTask() {
   var priorityLabel = document.createElement('div');
   priorityLabel.innerText = 'Priority:'
   var priority = document.createElement('div');
-  priority.innerText = task.priority;
+  priority.innerText = capitalise(task.priority);
   details.appendChild(priorityLabel);
   details.appendChild(priority);
   frame.appendChild(details);
@@ -365,28 +375,35 @@ function viewTask() {
   completeBtn.setAttribute('value', `${activeProject} + ${task.title}`);
   completeBtn.classList.add('innerCompleteBtn')
   completeBtn.addEventListener('click', completeTask);
+  completeBtn.addEventListener('click', refreshTasks);
   complete.appendChild(completeBtn);
 
   var editBtn = document.createElement('button');
-  editBtn.innerText = 'Edit';
+  editBtn.innerText = 'Edit Task';
   editBtn.setAttribute('value', task.title);
   editBtn.addEventListener('click', editTask);
   taskBtns.appendChild(editBtn);
 
   var deleteBtn = document.createElement('button');
-  deleteBtn.innerText = 'Remove';
+  deleteBtn.innerText = 'Delete Task';
   deleteBtn.setAttribute('value', task.title);
   deleteBtn.setAttribute('value', `${activeProject} + ${task.title}`);
   deleteBtn.addEventListener('click', removeTask);
   taskBtns.appendChild(deleteBtn);
+
+  var goBackBtn = document.createElement('button');
+  goBackBtn.innerText = "Go Back";
+  goBackBtn.addEventListener('click', refreshTasks);
+  taskBtns.appendChild(goBackBtn);
 };
 
+// Creates page for editing task values. 
 function editTask() {
   newTaskForm();
   var project = fetchProject(activeProject);
   var task = project.fetchTask(this.value);
 
-  document.getElementById('header').innerText = `Editing ${task.title}`;
+  document.getElementById('pageTitle').innerText = `Editing task: ${task.title}`;
   document.getElementById('title').value = task.title;
   document.getElementById('description').value = task.description;
   document.getElementById('dueDate').value = parseJSON(task.dueDate).toISOString().split('T')[0].slice(0, 10);
@@ -399,6 +416,7 @@ function editTask() {
   addBtn.addEventListener('click', saveEdit);
 }
 
+// Replaces old task in array with new task created from edited details.
 function saveEdit() {
   var project = fetchProject(activeProject);
   var index = project.findIndex(this.value);
@@ -419,5 +437,62 @@ function saveEdit() {
   refreshTasks();
 };
 
+export function homePage() {
 
+  if (localStorage.length == 0) {
+    loadBlankProject();
+    activeProject = 'default';
+    makeSideBar();
+  } else {
+    activeProject = Object.keys(localStorage)[0];
+
+    makeSideBar();
+  }
+
+  
+  // createFrame('Welcome!');
+  // var frame = document.getElementById('taskFrame');
+  // var intro = document.createElement('p');
+  // var btns = document.createElement('div');
+  // btns.classList.add('homeBtn')
+  // frame.appendChild(btns);
+
+  // if (localStorage.length == 0 ) {
+  //   loadSampleData();
+  // }
+  // makeSideBar();
+
+
+
+  // var blankProjectBtn = document.createElement('button');
+  // blankProjectBtn.innerText = 'Blank project';
+  // blankProjectBtn.addEventListener('click', () => {
+  //   loadBlankProject();
+  //   activeProject = 'cleaning';
+  //   makeSideBar();
+  //   refreshTasks();
+  // })
+
+
+
+  // btns.appendChild(blankProjectBtn);
+
+  // var demoProjectBtn = document.createElement('button');
+  // demoProjectBtn.innerText = "Demo project";
+  // demoProjectBtn.addEventListener('click', () => {
+  //   loadSampleData();
+  //   activeProject = 'default';
+  //   makeSideBar();
+  //   refreshTasks();
+  // })
+  
+
+  // btns.appendChild(demoProjectBtn);
+
+}
+
+// Capitalises given word
+function capitalise(word) {
+  return word.slice(0, 1).toUpperCase() + word.slice(1);
+}
 

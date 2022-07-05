@@ -94,7 +94,7 @@ button:hover {
   display: flex;
   flex-direction: column;;
   align-items: center;
-  gap: 10px;
+  gap: 15px;
   padding: 10px 40px;
 }
 
@@ -112,19 +112,23 @@ button:hover {
   max-height: 100px;
 }
 
-#sideBar button, .btnArea button {
+#sideBar button, .btnArea button{
   width: 100%;
   padding: 10px 5px;
   border-radius: 10px;
   outline: none;
   border: none;
   font-size: 1rem;
-  color: var(--base-blue);
   font-family: InterBold;
   color: white;
   background-image: linear-gradient(135deg, #abd699, #75c9b7);
   box-shadow: 0px 3px 3px rgba(0,0,0,0.2);
 }
+
+#sideBar button:hover {
+  transform: scale(1.1);
+}
+
 
 .projectBtns {
   display: flex;
@@ -221,23 +225,39 @@ button:hover {
   height: 100%;
 }
 
-.btns button, .taskBtns button {
+.btns button, .taskBtns button, .homeBtn button{
   color: #75c9b7;
   background-color: #ffe26a; 
   border: 3px solid rgba(255, 255, 255, 0);
   font-family: 'InterBold';
   border-radius: 5px;
   font-size: 1.1rem;
+  box-shadow: 0px 3px 3px rgba(0,0,0,0.2);
+  
 }
 
-.btns button:hover, .taskBtns button:hover {
+.btns button:hover, .taskBtns button:hover,.homeBtn button:hover{
   border: 3px solid #ffe26a; 
-  color: white;
-  background-color: rgba(255, 255, 255, 0.168);
+  color: rgb(255, 255, 255);
 }
 
 .taskBtns button {
   font-size: 1.5rem;
+}
+
+.taskFrame input, .taskFrame select {
+  color: white;
+  border: 3px solid #ffe26a;
+  padding: 3px;
+  border-radius: 5px;
+  font-family: InterBold;
+  font-size: 1.3rem;
+  background-color: #75c9b7;
+}
+
+.taskFrame input:focus, .taskFrame select:focus {
+  border: 3px solid white;
+  outline: none;
 }
 
 
@@ -274,6 +294,7 @@ tr:nth-of-type(1):hover {
   font-size: 1.1rem;
   font-family: 'InterExtraBold';
   border-radius: 5px;
+  
 }
 
 .completeBtn:hover {
@@ -298,12 +319,9 @@ tr:nth-of-type(1):hover {
   font-size: 1.1rem;
   font-family: 'InterExtraBold';
   border-radius: 5px;
+  
 }
 
-
-.viewBtn:hover, .completeBtn:hover{
- 
-}
 
 .taskBtns {
   width: 100%;
