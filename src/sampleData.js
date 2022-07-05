@@ -1,18 +1,19 @@
-import { project } from './projects'
+import { makeProject } from './projects'
 import { task } from './tasks.js';
 import { saveProject } from "./projects";
 
 
 export function loadBlankProject() {
-  var startData = project('default');
+  var startData = makeProject('default');
   saveProject('default', startData);
 }; 
 
 
 export function loadSampleData() {
   // Create example projects
-  var cleaning = project('cleaning');
-  var coding = project('project');
+  var cleaning = makeProject('cleaning');
+  var coding = makeProject('project');
+  var shopping = makeProject('shopping');
 
   var exampleDate = new Date();
 
@@ -28,6 +29,12 @@ export function loadSampleData() {
   coding.addTask(task('style', 'style the project', 'low', exampleDate));
   coding.addTask(task('bug hunt', 'look for bugs in the code', 'medium', exampleDate));
   saveProject('coding', coding);
+
+  // Shopping sample data
+  shopping.addTask(task('Salt', 'buy some new table salt', 'low', exampleDate));
+  shopping.addTask(task('Sunglasses', 'buy some new sunglasses', 'medium', exampleDate));
+  shopping.addTask(task('batteries', 'buy some AAA batteries', 'high', exampleDate));
+  saveProject('shopping', shopping);
 };
 
 

@@ -1,12 +1,12 @@
 import { format, parseJSON } from 'date-fns'
-import { project, projectNames, fetchProject, completeTask, removeTask, saveProject } from './projects.js'
+import { test, projectNames, makeProject, fetchProject, completeTask, removeTask, saveProject } from './projects.js'
 import { loadSampleData, loadBlankProject } from './sampleData.js';
 import { task } from './tasks.js';
 
 const main = document.getElementById('main');
 var activeProject = '';
 
-// Creates SideBar 
+// Creates side bar content
 export function makeSideBar() {
   var sideBar = document.getElementById('sideBar');
   sideBar.innerHTML = '';
@@ -15,8 +15,7 @@ export function makeSideBar() {
   title.innerText = "Do It!"
   sideBar.appendChild(title);
 
-
-  const btnArea = document.createElement('div');
+  var btnArea = document.createElement('div');
   btnArea.classList.add('projectBtns');
   sideBar.appendChild(btnArea);
 
@@ -28,6 +27,12 @@ export function makeSideBar() {
     btnArea.appendChild(btn);
   };
 
+  var newProjectBtn = document.createElement('button');
+  newProjectBtn.innerText = '+';
+  newProjectBtn.setAttribute('id', 'newProjectBtn');
+  newProjectBtn.addEventListener('click', createProject);
+  btnArea.appendChild(newProjectBtn);
+
   var resetBtn = document.createElement('button');
   resetBtn.innerText = "Reset All";
   resetBtn.addEventListener('click', () => {
@@ -35,12 +40,9 @@ export function makeSideBar() {
     window.location.reload();
   })
   sideBar.appendChild(resetBtn);
-
-
-
 };
 
-// Creates Task Frame and Frame Title
+// Creates main body frame and title
 function createFrame(titleText) {
   const frame = document.createElement('div');
   frame.setAttribute('id', 'taskFrame');
@@ -68,17 +70,45 @@ export function refreshTasks() {
   createTaskTable(project);
 };
 
-// Creates new project from sidebar input.
+// Creates page to add new project
 function createProject() {
+  main.innerHTML = '';
+  createFrame('New Task');
+  var frame = document.getElementById('taskFrame');
+  frame.classList.add('taskFrame');
+
+  var inputs = document.createElement('div');
+  inputs.classList.add('taskDetails');
+  frame.appendChild(inputs);
+
+  var inputLabel = document.createElement('label');
+  inputLabel.innerText = "Project name: ";
+  inputs.appendChild(inputLabel);
+
+  var titleInput = document.createElement('input');
+  titleInput.setAttribute('id', 'projectInput');
+  inputs.appendChild(titleInput);
+
+  var addBtn = document.createElement('button');
+  addBtn.innerText = "Add";
+  addBtn.addEventListener('click', addProject);
+  addBtn.classList.add('addBtn');
+  frame.appendChild(addBtn);
+};
+
+// Creates new project from user-inputted name.
+function addProject() {
   var newProjectName = document.getElementById('projectInput');
   if (newProjectName.value.length < 1) {
     alert('Please enter a project name');
   } else {
-    saveProject(newProjectName.value, project());
+    var newProject = makeProject();
+    saveProject(newProjectName.value, newProject);
+    test();
     newProjectName.value = '';
     makeSideBar();
   };
-};
+}
 
 // Removes project
 function removeProject() {
@@ -87,7 +117,6 @@ function removeProject() {
   activeProject = Object.keys(localStorage)[0];
   refreshTasks();
 };
-
 
 // Shows overview of all tasks for a project. 
 function showTasks() {
@@ -243,7 +272,6 @@ function newTaskForm() {
   formInputs.appendChild(priorityLabel);
   formInputs.appendChild(priority);
 
-  // Buttons
   var btns = document.createElement('div');
   btns.classList.add('taskBtns');
   var addBtn = document.createElement('button');
@@ -368,6 +396,7 @@ function viewTask() {
   deleteBtn.setAttribute('value', task.title);
   deleteBtn.setAttribute('value', `${activeProject} + ${task.title}`);
   deleteBtn.addEventListener('click', removeTask);
+  deleteBtn.addEventListener('click', refreshTasks);
   taskBtns.appendChild(deleteBtn);
 
   var goBackBtn = document.createElement('button');
@@ -416,8 +445,9 @@ function saveEdit() {
   refreshTasks();
 };
 
-export function homePage() {
 
+// Creates home page content displayed on first visit
+export function homePage() {
   if (localStorage.length == 0) {
     activeProject = 'default';
     createFrame('Welcome!');
@@ -427,7 +457,7 @@ export function homePage() {
 
     var intro = document.createElement('p');
   
-    intro.innerText = "It looks like it's your first time here. Would you like to load demo data or continue with a blank project?";
+    intro.innerText = "It looks like it's your first time here. Would you like to load demo data or start with a blank project?";
     frame.appendChild(intro);
 
     var btns = document.createElement('div');

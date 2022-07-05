@@ -1,6 +1,6 @@
 
 // Project obj factory function.
-export function project() {
+export function makeProject() {
   var arr = [];
   function addTask(task) {
     this.arr.push(task);
@@ -15,7 +15,7 @@ export function saveProject(key, value) {
 
 // Retrieves project from local storage and adds methods.
 export function fetchProject(name) {
-  project = JSON.parse(window.localStorage.getItem(name));
+  var project = JSON.parse(window.localStorage.getItem(name));
   project.addTask = function(name) {
     this.arr.push(name)
   };
@@ -77,13 +77,19 @@ export function completeTask() {
 
 // Removes task from project's task array
 export function removeTask() {
+  console.log('Hello!')
   var arr = (this.value).split(' + ')
   var projectName = arr[0];
   var taskName = arr[1];
   var project = fetchProject(projectName);
   project.removeTask(taskName);
   saveProject(projectName, project);
+  console.log('WOrking?')
 };
+
+export function test() {
+  console.log('Hello!')
+}
 
 
 
