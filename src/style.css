@@ -3,65 +3,146 @@
    License: none (public domain)
 */
 
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed, 
-figure, figcaption, footer, header, hgroup, 
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	font-size: 100%;
-	font: inherit;
-	vertical-align: baseline;
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
 }
 /* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure, 
-footer, header, hgroup, menu, nav, section {
-	display: block;
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
 }
 body {
-	line-height: 1;
+  line-height: 1;
 }
-ol, ul {
-	list-style: none;
+ol,
+ul {
+  list-style: none;
 }
-blockquote, q {
-	quotes: none;
+blockquote,
+q {
+  quotes: none;
 }
-blockquote:before, blockquote:after,
-q:before, q:after {
-	content: '';
-	content: none;
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: '';
+  content: none;
 }
 table {
-	border-collapse: collapse;
-	border-spacing: 0;
+  border-collapse: collapse;
+  border-spacing: 0;
 }
 
 /* MY CSS */
 
 @font-face {
   font-family: 'Inter';
-  src: url('./fonts/Inter-Regular.ttf') format('truetype')
+  src: url('./fonts/Inter-Regular.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'InterBold';
-  src: url('./fonts/Inter-Bold.ttf') format('truetype')
+  src: url('./fonts/Inter-Bold.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'InterExtraBold';
-  src: url('./fonts//Inter-ExtraBold.ttf') format('truetype')
+  src: url('./fonts//Inter-ExtraBold.ttf') format('truetype');
 }
 
 body {
@@ -74,7 +155,8 @@ body {
   --base-teal: #75c9b7;
 }
 
-body, button {
+body,
+button {
   font-family: 'Inter';
 }
 
@@ -95,7 +177,7 @@ button:hover {
   background-color: var(--base-yellow);
   grid-row: 1 / 4;
   display: grid;
-  grid-template-rows: auto 1fr 50px;;
+  grid-template-rows: auto 1fr 50px;
   padding: 10px 40px;
   gap: 20px;
 }
@@ -104,10 +186,11 @@ button:hover {
   font-family: InterExtraBold;
   font-size: 4rem;
   color: white;
-  text-shadow: 0px 3px 3px rgba(0,0,0,0.2);;
+  text-shadow: 0px 3px 3px rgba(0, 0, 0, 0.2);
 }
 
-#sideBar button, .btnArea button{
+#sideBar button,
+.btnArea button {
   width: 100%;
   padding: 10px 5px;
   border-radius: 10px;
@@ -116,8 +199,12 @@ button:hover {
   font-size: 1rem;
   font-family: InterBold;
   color: white;
-  background-image: linear-gradient(135deg, var(--base-olive), var(--base-teal));
-  box-shadow: 0px 3px 3px rgba(0,0,0,0.2);
+  background-image: linear-gradient(
+    135deg,
+    var(--base-olive),
+    var(--base-teal)
+  );
+  box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.2);
 }
 
 #sideBar button:hover {
@@ -126,7 +213,7 @@ button:hover {
 
 .projectBtns {
   display: flex;
-  flex-direction: column;;
+  flex-direction: column;
   align-items: center;
   gap: 10px;
   width: 100%;
@@ -134,7 +221,7 @@ button:hover {
 
 .newTaskMain {
   grid-row: 1 / 4;
-  background-color:rgb(248, 255, 232);
+  background-color: rgb(248, 255, 232);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -178,13 +265,17 @@ p {
 .taskFrame {
   height: 85%;
   width: 85%;
-  background-image: linear-gradient(135deg, var(--base-olive), var(--base-teal));
+  background-image: linear-gradient(
+    135deg,
+    var(--base-olive),
+    var(--base-teal)
+  );
   display: flex;
   flex-direction: column;
   align-items: center;
   border-radius: 10px;
   padding: 30px;
-  box-shadow: 0px 3px 3px rgba(0,0,0,0.2);
+  box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.2);
 }
 
 .taskFrame h1 {
@@ -218,19 +309,24 @@ p {
   height: 100%;
 }
 
-.btns button, .taskBtns button, .homeBtn button, .addBtn {
+.btns button,
+.taskBtns button,
+.homeBtn button,
+.addBtn {
   color: var(--base-teal);
-  background-color: var(--base-yellow); 
+  background-color: var(--base-yellow);
   border: 3px solid rgba(255, 255, 255, 0);
   font-family: 'InterBold';
   border-radius: 5px;
   font-size: 1.1rem;
-  box-shadow: 0px 3px 3px rgba(0,0,0,0.2);
-  
+  box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.2);
 }
 
-.btns button:hover, .taskBtns button:hover,.homeBtn button:hover, .addBtn:hover {
-  border: 3px solid var(--base-yellow); 
+.btns button:hover,
+.taskBtns button:hover,
+.homeBtn button:hover,
+.addBtn:hover {
+  border: 3px solid var(--base-yellow);
   color: rgb(255, 255, 255);
 }
 
@@ -238,7 +334,8 @@ p {
   font-size: 1.5rem;
 }
 
-.taskFrame input, .taskFrame select {
+.taskFrame input,
+.taskFrame select {
   color: white;
   border: 3px solid var(--base-yellow);
   padding: 3px;
@@ -248,7 +345,8 @@ p {
   background-color: var(--base-teal);
 }
 
-.taskFrame input:focus, .taskFrame select:focus {
+.taskFrame input:focus,
+.taskFrame select:focus {
   border: 3px solid white;
   outline: none;
 }
@@ -266,11 +364,12 @@ th {
   font-size: 1.2rem;
 }
 
-th, td {
+th,
+td {
   padding: 10px 20px;
 }
 
-tr:hover{
+tr:hover {
   background-color: #ffe16a44;
 }
 
@@ -315,4 +414,3 @@ tr:nth-of-type(1):hover {
   justify-content: center;
   gap: 50px;
 }
-

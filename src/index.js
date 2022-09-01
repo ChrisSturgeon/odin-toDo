@@ -1,4 +1,4 @@
-import { homePage } from './domEvents.js'
-import './style.css'
+import { homePage } from './domEvents.js';
+import './style.css';
 
 homePage();
