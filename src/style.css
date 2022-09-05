@@ -132,27 +132,31 @@ table {
 
 @font-face {
   font-family: 'Inter';
-  src: url('./fonts/Inter-Regular.ttf') format('truetype');
+  src: url('./fonts/Jost-Medium.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'InterBold';
-  src: url('./fonts/Inter-Bold.ttf') format('truetype');
+  src: url('./fonts/Jost-Bold.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'InterExtraBold';
-  src: url('./fonts//Inter-ExtraBold.ttf') format('truetype');
+  src: url('./fonts//Jost-ExtraBold.ttf') format('truetype');
 }
 
-body {
-  font-family: sans-serif;
+@font-face {
+  font-family: 'JostSemiBold';
+  src: url('./fonts//Jost-SemiBold.ttf') format('truetype');
 }
 
 :root {
-  --base-yellow: #ffe26a;
-  --base-olive: #abd699;
+  --base-yellow: #0477bf;
+  --base-olive: rgb(0, 130, 90);
   --base-teal: #75c9b7;
+  --base-red: rgb(230, 50, 40);
+  --base-orange: rgb(240, 140, 40);
+  --base-accent: rgb(240, 200, 0);
 }
 
 body,
@@ -162,11 +166,11 @@ button {
 
 body {
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
   display: grid;
   grid-template-columns: 250px 1fr;
   grid-template-rows: 1fr;
-  color: white;
+  color: black;
 }
 
 button:hover {
@@ -174,40 +178,43 @@ button:hover {
 }
 
 #sideBar {
-  background-color: var(--base-yellow);
+  /* background-color: var(--base-yellow);
   grid-row: 1 / 4;
   display: grid;
+  justify-items: center;
   grid-template-rows: auto 1fr 50px;
   padding: 10px 40px;
-  gap: 20px;
+  gap: 20px; */
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  grid-row: 1 / 4;
+  background-color: var(--base-yellow);
+  padding-top: 1em;
 }
 
 #sideBar h1 {
   font-family: InterExtraBold;
-  font-size: 4rem;
+  font-size: 3.5rem;
   color: white;
-  text-shadow: 0px 3px 3px rgba(0, 0, 0, 0.2);
 }
 
 #sideBar button,
 .btnArea button {
   width: 100%;
   padding: 10px 5px;
-  border-radius: 10px;
+  border-radius: 1px;
   outline: none;
   border: none;
-  font-size: 1rem;
-  font-family: InterBold;
-  color: white;
-  background-image: linear-gradient(
-    135deg,
-    var(--base-olive),
-    var(--base-teal)
-  );
-  box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.2);
+  font-size: 1.3rem;
+  font-family: 'Inter';
+  color: black;
+  background-color: var(--base-accent);
 }
 
-#sideBar button:hover {
+button:hover {
   transform: scale(1.05);
 }
 
@@ -221,7 +228,7 @@ button:hover {
 
 .newTaskMain {
   grid-row: 1 / 4;
-  background-color: rgb(248, 255, 232);
+  background-color: white;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -229,7 +236,7 @@ button:hover {
 
 p {
   padding-bottom: 50px;
-  font-family: InterBold;
+  font-family: 'Inter';
   font-size: 1.5rem;
 }
 
@@ -246,6 +253,7 @@ p {
   font-size: 2rem;
   color: rgb(0, 0, 0);
   text-align: center;
+  font-family: 'JostSemiBold';
 }
 
 .formInputs {
@@ -256,6 +264,7 @@ p {
 .taskDetails {
   font-family: InterBold;
   display: grid;
+  align-items: center;
   grid-template-columns: 1fr 1fr;
   font-size: 1.3rem;
   gap: 20px;
@@ -265,23 +274,20 @@ p {
 .taskFrame {
   height: 85%;
   width: 85%;
-  background-image: linear-gradient(
-    135deg,
-    var(--base-olive),
-    var(--base-teal)
-  );
+  background-color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
   border-radius: 10px;
   padding: 30px;
-  box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.2);
 }
 
 .taskFrame h1 {
   font-size: 2rem;
-  text-decoration: underline 3px solid var(--base-yellow);
+  text-decoration: underline 4px solid var(--base-red);
   text-underline-offset: 2px;
+  color: black;
+  font-family: 'Inter';
 }
 
 .taskFrame button {
@@ -306,28 +312,20 @@ p {
 .btns {
   display: flex;
   gap: 30px;
-  height: 100%;
+  min-height: 100%;
 }
 
 .btns button,
 .taskBtns button,
 .homeBtn button,
-.addBtn {
-  color: var(--base-teal);
-  background-color: var(--base-yellow);
+.addBtn,
+.choiceDiv button {
+  color: white;
+  background-color: var(--base-red);
   border: 3px solid rgba(255, 255, 255, 0);
   font-family: 'InterBold';
-  border-radius: 5px;
+  border-radius: 1px;
   font-size: 1.1rem;
-  box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.2);
-}
-
-.btns button:hover,
-.taskBtns button:hover,
-.homeBtn button:hover,
-.addBtn:hover {
-  border: 3px solid var(--base-yellow);
-  color: rgb(255, 255, 255);
 }
 
 .taskBtns button {
@@ -336,31 +334,30 @@ p {
 
 .taskFrame input,
 .taskFrame select {
-  color: white;
+  color: black;
   border: 3px solid var(--base-yellow);
   padding: 3px;
-  border-radius: 5px;
+  border-radius: 1px;
   font-family: InterBold;
   font-size: 1.3rem;
-  background-color: var(--base-teal);
 }
 
 .taskFrame input:focus,
 .taskFrame select:focus {
-  border: 3px solid white;
+  border: 3px solid var(--base-accent);
   outline: none;
 }
 
 table {
   font-size: 1rem;
   text-align: center;
-  font-family: InterBold;
-  color: white;
+  font-family: Inter;
+  color: black;
 }
 
 th {
   font-weight: bold;
-  border-bottom: 3px solid var(--base-yellow);
+  border-bottom: 4px solid var(--base-yellow);
   font-size: 1.2rem;
 }
 
@@ -370,20 +367,20 @@ td {
 }
 
 tr:hover {
-  background-color: #ffe16a44;
+  background-color: rgb(240, 200, 0);
 }
 
 tr:nth-of-type(1):hover {
-  background-color: rgba(255, 255, 255, 0);
+  background-color: rgba(48, 188, 85, 0);
 }
 
 .completeBtn {
   background-color: rgba(255, 255, 255, 0);
   border: 2px solid var(--base-yellow);
-  color: #ffe16a00;
+  color: var(--base-red);
   font-size: 1.1rem;
   font-family: 'InterExtraBold';
-  border-radius: 5px;
+  border-radius: 1px;
 }
 
 .completeBtn:hover {
@@ -393,16 +390,16 @@ tr:nth-of-type(1):hover {
 .innerCompleteBtn {
   background-color: rgba(255, 255, 255, 0);
   border: 2px solid var(--base-yellow);
-  color: #ffe16a;
+  color: var(--base-red);
   font-size: 1.2rem;
   font-family: 'InterExtraBold';
-  border-radius: 5px;
+  border-radius: 1px;
 }
 
 .viewBtn {
   background-color: rgba(255, 255, 255, 0);
   border: 2px solid var(--base-yellow);
-  color: #ffe16a;
+  color: var(--base-red);
   font-size: 1.1rem;
   font-family: 'InterExtraBold';
   border-radius: 5px;
@@ -413,4 +410,37 @@ tr:nth-of-type(1):hover {
   display: flex;
   justify-content: center;
   gap: 50px;
+}
+
+.user-details {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  font-size: 0.8rem;
+  text-align: center;
+  align-items: center;
+  width: 100%;
+  background-color: rgb(162, 21, 26);
+}
+
+.user-details img {
+  max-width: 20%;
+}
+
+p {
+  line-height: 1.2em;
+}
+
+.choiceDiv {
+  display: flex;
+  width: 50%;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.projectsDiv {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
 }

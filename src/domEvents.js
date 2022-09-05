@@ -1,7 +1,16 @@
-import { format, parseJSON } from 'date-fns'
-import { test, projectNames, makeProject, fetchProject, completeTask, removeTask, saveProject } from './projects.js'
+import { format, parseJSON } from 'date-fns';
+import {
+  test,
+  projectNames,
+  makeProject,
+  fetchProject,
+  completeTask,
+  removeTask,
+  saveProject,
+} from './projects.js';
 import { loadSampleData, loadBlankProject } from './sampleData.js';
 import { task } from './tasks.js';
+import { signIn } from './userDomEvents';
 
 const main = document.getElementById('main');
 var activeProject = '';
@@ -12,7 +21,7 @@ export function makeSideBar() {
   sideBar.innerHTML = '';
 
   var title = document.createElement('h1');
-  title.innerText = "Do It!"
+  title.innerText = 'Do It!';
   sideBar.appendChild(title);
 
   var btnArea = document.createElement('div');
@@ -25,7 +34,7 @@ export function makeSideBar() {
     btn.setAttribute('value', project);
     btn.addEventListener('click', showTasks);
     btnArea.appendChild(btn);
-  };
+  }
 
   var newProjectBtn = document.createElement('button');
   newProjectBtn.innerText = '+';
@@ -34,16 +43,16 @@ export function makeSideBar() {
   btnArea.appendChild(newProjectBtn);
 
   var resetBtn = document.createElement('button');
-  resetBtn.innerText = "Reset All";
+  resetBtn.innerText = 'Reset All';
   resetBtn.addEventListener('click', () => {
     localStorage.clear();
     window.location.reload();
-  })
+  });
   sideBar.appendChild(resetBtn);
-};
+}
 
 // Creates main body frame and title
-function createFrame(titleText) {
+export function createFrame(titleText) {
   const frame = document.createElement('div');
   frame.setAttribute('id', 'taskFrame');
   frame.classList.add('taskFrame');
@@ -58,22 +67,22 @@ function createFrame(titleText) {
   title.innerText = titleText;
   header.appendChild(title);
   frame.appendChild(header);
-};
+}
 
 // Refreshes page with tasks from active project.
 export function refreshTasks() {
-  var project = fetchProject (activeProject);
+  var project = fetchProject(activeProject);
   main.innerHTML = '';
   var titleText = `${capitalise(activeProject)} Tasks`;
   createFrame(titleText);
   createProjectBtns();
   createTaskTable(project);
-};
+}
 
 // Creates page to add new project
 function createProject() {
   main.innerHTML = '';
-  createFrame('New Task');
+  createFrame('New Project');
   var frame = document.getElementById('taskFrame');
   frame.classList.add('taskFrame');
 
@@ -82,7 +91,7 @@ function createProject() {
   frame.appendChild(inputs);
 
   var inputLabel = document.createElement('label');
-  inputLabel.innerText = "Project name: ";
+  inputLabel.innerText = 'Project name: ';
   inputs.appendChild(inputLabel);
 
   var titleInput = document.createElement('input');
@@ -90,11 +99,11 @@ function createProject() {
   inputs.appendChild(titleInput);
 
   var addBtn = document.createElement('button');
-  addBtn.innerText = "Add";
+  addBtn.innerText = 'Add';
   addBtn.addEventListener('click', addProject);
   addBtn.classList.add('addBtn');
   frame.appendChild(addBtn);
-};
+}
 
 // Creates new project from user-inputted name.
 function addProject() {
@@ -106,7 +115,7 @@ function addProject() {
     saveProject(newProjectName.value, newProject);
     newProjectName.value = '';
     makeSideBar();
-  };
+  }
 }
 
 // Removes project
@@ -115,19 +124,19 @@ function removeProject() {
   makeSideBar();
   activeProject = Object.keys(localStorage)[0];
   refreshTasks();
-};
+}
 
-// Shows overview of all tasks for a project. 
+// Shows overview of all tasks for a project.
 function showTasks() {
   activeProject = this.value;
-  var project = fetchProject ( this.value );
+  var project = fetchProject(this.value);
   main.innerHTML = '';
 
-  var titleText = `${capitalise(activeProject)} Tasks`
+  var titleText = `${capitalise(activeProject)} Tasks`;
   createFrame(titleText);
   createProjectBtns();
   createTaskTable(project);
-};
+}
 
 // Creates header for Task Frame
 function createProjectBtns() {
@@ -137,15 +146,15 @@ function createProjectBtns() {
   header.appendChild(btns);
 
   var newBtn = document.createElement('button');
-  newBtn.innerText = "New Task";
+  newBtn.innerText = 'New Task';
   newBtn.addEventListener('click', newTaskForm);
   btns.appendChild(newBtn);
   var delProject = document.createElement('button');
-  delProject.innerText = "Delete project";
+  delProject.innerText = 'Delete project';
   delProject.setAttribute('value', activeProject);
   delProject.addEventListener('click', removeProject);
   btns.appendChild(delProject);
-};
+}
 
 // Creates task overview table
 function createTaskTable(project) {
@@ -153,12 +162,19 @@ function createTaskTable(project) {
   const table = document.createElement('table');
   table.setAttribute('id', 'taskTable');
   const headerRow = document.createElement('tr');
-  const headers = ['Title', 'Due Date', 'Priority', 'Complete', 'View/Edit', 'Delete'];
+  const headers = [
+    'Title',
+    'Due Date',
+    'Priority',
+    'Complete',
+    'View/Edit',
+    'Delete',
+  ];
   for (var header of headers) {
     var headerCell = document.createElement('th');
     headerCell.innerText = header;
     headerRow.appendChild(headerCell);
-  };
+  }
   table.appendChild(headerRow);
   taskFrame.appendChild(table);
 
@@ -172,7 +188,7 @@ function createTaskTable(project) {
     row.appendChild(title);
 
     var dueDate = document.createElement('td');
-    dueDate.innerText = format((parseJSON(task.dueDate)), 'EE. do MMM');
+    dueDate.innerText = format(parseJSON(task.dueDate), 'EE. do MMM');
     row.appendChild(dueDate);
 
     var priority = document.createElement('td');
@@ -184,10 +200,9 @@ function createTaskTable(project) {
 
     if (task['completed'] == false) {
       completeBtn.innerHTML = '&#10003';
-      
     } else {
       completeBtn.innerHTML = '&#10003;';
-      row.style.opacity = "30%";
+      row.style.opacity = '30%';
     }
     completeBtn.setAttribute('value', `${activeProject} + ${task.title}`);
     completeBtn.addEventListener('click', completeTask);
@@ -212,8 +227,8 @@ function createTaskTable(project) {
     removeBtn.addEventListener('click', removeTask);
     removeBtn.addEventListener('click', refreshTasks);
     remove.appendChild(removeBtn);
-  };
-};
+  }
+}
 
 // Creates page for inputting new task.
 function newTaskForm() {
@@ -224,17 +239,17 @@ function newTaskForm() {
   var frame = document.getElementById('taskFrame');
   var formInputs = document.createElement('div');
   formInputs.classList.add('taskDetails');
-  frame.appendChild(formInputs)
-  
+  frame.appendChild(formInputs);
+
   var titleLabel = document.createElement('label');
-  titleLabel.innerText = 'Title:'
+  titleLabel.innerText = 'Title:';
   var titleInput = document.createElement('input');
   titleInput.setAttribute('id', 'title');
   formInputs.appendChild(titleLabel);
   formInputs.appendChild(titleInput);
 
   var descriptionLabel = document.createElement('label');
-  descriptionLabel.innerText = 'Description:'
+  descriptionLabel.innerText = 'Description:';
   var descriptionInput = document.createElement('input');
   descriptionInput.setAttribute('id', 'description');
   formInputs.appendChild(descriptionLabel);
@@ -248,7 +263,7 @@ function newTaskForm() {
   dueDate.setAttribute('type', 'date');
   dueDate.setAttribute('name', 'dueDate');
   dueDate.setAttribute('id', 'dueDate');
-  dueDate.setAttribute('value', (format((new Date()), 'yyyy-MM-dd')));
+  dueDate.setAttribute('value', format(new Date(), 'yyyy-MM-dd'));
 
   formInputs.appendChild(dateLabel);
   formInputs.appendChild(dueDate);
@@ -274,18 +289,17 @@ function newTaskForm() {
   var btns = document.createElement('div');
   btns.classList.add('taskBtns');
   var addBtn = document.createElement('button');
-  addBtn.innerText = "Add Task";
+  addBtn.innerText = 'Add Task';
   addBtn.setAttribute('id', 'addBtn');
   addBtn.addEventListener('click', saveTask);
   btns.appendChild(addBtn);
 
   var goBackBtn = document.createElement('button');
-  goBackBtn.innerText = "Go Back";
+  goBackBtn.innerText = 'Go Back';
   goBackBtn.addEventListener('click', refreshTasks);
   btns.appendChild(goBackBtn);
   frame.appendChild(btns);
-
-};
+}
 
 // Saves new task into active project
 function saveTask() {
@@ -298,8 +312,7 @@ function saveTask() {
   project.addTask(newTask);
   saveProject(activeProject, project);
   refreshTasks();
-};
-
+}
 
 // Shows full details for given task
 function viewTask() {
@@ -307,7 +320,7 @@ function viewTask() {
   var task = project.fetchTask(this.value);
   main.innerHTML = '';
 
-  var titleText = `Details for ${task.title}`
+  var titleText = `Details for ${task.title}`;
   createFrame(titleText);
 
   const frame = document.getElementById('taskFrame');
@@ -331,12 +344,12 @@ function viewTask() {
   var dueDateLabel = document.createElement('div');
   dueDateLabel.innerText = 'Due Date:';
   var dueDate = document.createElement('div');
-  dueDate.innerText = format((parseJSON(task.dueDate)), 'EE. do MMM yy');
+  dueDate.innerText = format(parseJSON(task.dueDate), 'EE. do MMM yy');
   details.appendChild(dueDateLabel);
   details.appendChild(dueDate);
 
   var priorityLabel = document.createElement('div');
-  priorityLabel.innerText = 'Priority:'
+  priorityLabel.innerText = 'Priority:';
   var priority = document.createElement('div');
   priority.innerText = capitalise(task.priority);
   details.appendChild(priorityLabel);
@@ -344,8 +357,8 @@ function viewTask() {
   frame.appendChild(details);
 
   var completeLabel = document.createElement('div');
-  completeLabel.innerText = 'Complete:'
-  
+  completeLabel.innerText = 'Complete:';
+
   var complete = document.createElement('div');
 
   details.appendChild(completeLabel);
@@ -359,27 +372,26 @@ function viewTask() {
   var completeBtn = document.createElement('button');
 
   if (task.completed) {
-    completeBtn.innerHTML = "&#10003;"
+    completeBtn.innerHTML = '&#10003;';
     completeBtn.addEventListener('mouseover', () => {
-      completeBtn.innerHTML = "&#x2717;";  
+      completeBtn.innerHTML = '&#x2717;';
     });
     completeBtn.addEventListener('mouseout', () => {
-      completeBtn.innerHTML = "&#10003;";  
+      completeBtn.innerHTML = '&#10003;';
     });
-
   } else {
-    completeBtn.innerHTML = "&#x2717;"
+    completeBtn.innerHTML = '&#x2717;';
     completeBtn.addEventListener('mouseover', () => {
-      completeBtn.innerHTML = "&#10003;";  
+      completeBtn.innerHTML = '&#10003;';
     });
     completeBtn.addEventListener('mouseout', () => {
-      completeBtn.innerHTML = "&#x2717;";  
+      completeBtn.innerHTML = '&#x2717;';
     });
-  };
-  
+  }
+
   completeBtn.setAttribute('value', task.title);
   completeBtn.setAttribute('value', `${activeProject} + ${task.title}`);
-  completeBtn.classList.add('innerCompleteBtn')
+  completeBtn.classList.add('innerCompleteBtn');
   completeBtn.addEventListener('click', completeTask);
   completeBtn.addEventListener('click', refreshTasks);
   complete.appendChild(completeBtn);
@@ -399,25 +411,30 @@ function viewTask() {
   taskBtns.appendChild(deleteBtn);
 
   var goBackBtn = document.createElement('button');
-  goBackBtn.innerText = "Go Back";
+  goBackBtn.innerText = 'Go Back';
   goBackBtn.addEventListener('click', refreshTasks);
   taskBtns.appendChild(goBackBtn);
-};
+}
 
-// Creates page for editing task values. 
+// Creates page for editing task values.
 function editTask() {
   newTaskForm();
   var project = fetchProject(activeProject);
   var task = project.fetchTask(this.value);
 
-  document.getElementById('pageTitle').innerText = `Editing task: ${task.title}`;
+  document.getElementById(
+    'pageTitle'
+  ).innerText = `Editing task: ${task.title}`;
   document.getElementById('title').value = task.title;
   document.getElementById('description').value = task.description;
-  document.getElementById('dueDate').value = parseJSON(task.dueDate).toISOString().split('T')[0].slice(0, 10);
+  document.getElementById('dueDate').value = parseJSON(task.dueDate)
+    .toISOString()
+    .split('T')[0]
+    .slice(0, 10);
   document.getElementById('priority').value = task.priority;
 
   var addBtn = document.getElementById('addBtn');
-  addBtn.innerText = "Save edit";
+  addBtn.innerText = 'Save edit';
   addBtn.removeEventListener('click', saveTask);
   addBtn.setAttribute('value', task.title);
   addBtn.addEventListener('click', saveEdit);
@@ -442,8 +459,7 @@ function saveEdit() {
 
   saveProject(activeProject, project);
   refreshTasks();
-};
-
+}
 
 // Creates home page content displayed on first visit
 export function homePage() {
@@ -451,12 +467,16 @@ export function homePage() {
     activeProject = 'default';
     createFrame('Welcome!');
 
+    main.removeChild(document.getElementById('taskFrame'));
+
     var frame = document.getElementById('taskFrame');
-    frame.classList.add('taskFrame')
+    frame.innerHTML = '';
+    frame.classList.add('taskFrame');
 
     var intro = document.createElement('p');
-  
-    intro.innerText = "It looks like it's your first time here. Would you like to load demo data or start with a blank project?";
+
+    intro.innerText =
+      'Would you like to load demo data or start your own blank project?';
     frame.appendChild(intro);
 
     var btns = document.createElement('div');
@@ -471,7 +491,7 @@ export function homePage() {
       activeProject = 'cleaning';
       makeSideBar();
       refreshTasks();
-    })
+    });
     btns.appendChild(demoBtn);
 
     var blankProjectBtn = document.createElement('button');
@@ -481,19 +501,43 @@ export function homePage() {
       activeProject = 'default';
       makeSideBar();
       refreshTasks();
-    })
+    });
     btns.appendChild(blankProjectBtn);
-
   } else {
     activeProject = Object.keys(localStorage)[0];
     refreshTasks();
     makeSideBar();
-  };
-};
+  }
+}
 
 // Capitalises given word
-function capitalise(word) {
+export function capitalise(word) {
   return word.slice(0, 1).toUpperCase() + word.slice(1);
 }
 
+export function welcomePage() {
+  main.innerHTML = '';
+  createFrame('Welcome!');
 
+  var frame = document.getElementById('taskFrame');
+  frame.classList.add('taskFrame');
+
+  const choicePara = document.createElement('p');
+  choicePara.innerText =
+    'This project can use either local storage or your google account to store projects and tasks. Which would you like to use?';
+  frame.appendChild(choicePara);
+
+  const choiceDiv = document.createElement('div');
+  choiceDiv.classList.add('choiceDiv');
+  frame.appendChild(choiceDiv);
+
+  const fireBaseBtn = document.createElement('button');
+  fireBaseBtn.innerText = 'Google account';
+  fireBaseBtn.addEventListener('click', signIn);
+  choiceDiv.appendChild(fireBaseBtn);
+
+  const localStorageBtn = document.createElement('button');
+  localStorageBtn.innerText = 'Local storage';
+  localStorageBtn.addEventListener('click', homePage);
+  choiceDiv.appendChild(localStorageBtn);
+}
